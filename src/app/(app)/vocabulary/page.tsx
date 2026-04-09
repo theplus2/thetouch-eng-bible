@@ -66,7 +66,7 @@ export default function VocabularyPage() {
                 )}
                 {w.verse_text && (
                   <p className="mt-2 text-xs italic text-surface-400 line-clamp-2">
-                    "{w.verse_text}"
+                    &ldquo;{w.verse_text}&rdquo;
                   </p>
                 )}
               </div>

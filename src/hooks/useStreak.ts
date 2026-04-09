@@ -24,14 +24,14 @@ export function useStreak() {
     if (error || !data || data.length === 0) return 0;
 
     // 읽은 날짜를 고유 날짜로 변환 (시간 제거)
-    const uniqueDates = [
-      ...new Set(
+    const uniqueDates = Array.from(
+      new Set(
         data.map((log) => {
           const date = new Date(log.read_at);
           return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
         })
-      ),
-    ].sort((a, b) => {
+      )
+    ).sort((a, b) => {
       // 최신순 정렬
       return new Date(b).getTime() - new Date(a).getTime();
     });
