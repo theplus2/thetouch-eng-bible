@@ -42,7 +42,7 @@ export function useVocabulary() {
 
       const { data, error } = await supabase
         .from("vocabulary")
-        .upsert(row, { onConflict: "user_id,word" })
+        .upsert(row as any, { onConflict: "user_id,word" })
         .select()
         .single();
 
@@ -56,7 +56,7 @@ export function useVocabulary() {
   );
 
   /** 저장된 단어 목록 조회 */
-  const getVocabulary = useCallback(async () => {
+  const getVocabulary = useCallback(async (): Promise<Database["public"]["Tables"]["vocabulary"]["Row"][]> => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return [];
 

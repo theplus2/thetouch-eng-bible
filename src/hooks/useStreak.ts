@@ -19,7 +19,7 @@ export function useStreak() {
       .from("reading_log")
       .select("read_at")
       .eq("user_id", user.id)
-      .order("read_at", { ascending: false });
+      .order("read_at", { ascending: false }) as { data: { read_at: string }[] | null, error: any };
 
     if (error || !data || data.length === 0) return 0;
 

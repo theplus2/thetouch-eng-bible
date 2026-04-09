@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import type { Database } from "@/types/database";
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -33,7 +34,7 @@ export default function OnboardingPage() {
 
     const { error } = await supabase
       .from("profiles")
-      .upsert({ id: user.id, nickname: trimmed });
+      .upsert({ id: user.id, nickname: trimmed } as any);
 
     if (error) {
       setError(error.message);

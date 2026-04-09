@@ -23,7 +23,7 @@ export function useReadingLog() {
 
       const { data, error } = await supabase
         .from("reading_log")
-        .upsert(row, { onConflict: "user_id,book,chapter" })
+        .upsert(row as any, { onConflict: "user_id,book,chapter" })
         .select()
         .single();
 
@@ -37,7 +37,7 @@ export function useReadingLog() {
   );
 
   /** 특정 유저의 전체 읽기 기록 조회 */
-  const getReadingLog = useCallback(async () => {
+  const getReadingLog = useCallback(async (): Promise<Database["public"]["Tables"]["reading_log"]["Row"][]> => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return [];
 
