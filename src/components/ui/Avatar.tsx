@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface AvatarProps {
   /** 닉네임 (이니셜 표시용) */
   nickname: string;
@@ -13,6 +15,8 @@ const sizes = {
   md: "h-10 w-10 text-sm",
   lg: "h-14 w-14 text-lg",
 };
+
+const pixelSizes = { sm: 32, md: 40, lg: 56 };
 
 /** 닉네임에서 배경색 결정 (일관된 색상) */
 function getColorFromName(name: string): string {
@@ -35,9 +39,11 @@ export default function Avatar({
 
   if (avatarUrl) {
     return (
-      <img
+      <Image
         src={avatarUrl}
         alt={nickname}
+        width={pixelSizes[size]}
+        height={pixelSizes[size]}
         className={`rounded-full object-cover ${sizes[size]} ${className}`}
       />
     );
@@ -52,3 +58,4 @@ export default function Avatar({
     </div>
   );
 }
+

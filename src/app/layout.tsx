@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Serif } from "next/font/google";
 import "./globals.css";
 
@@ -15,18 +15,19 @@ const notoSerif = Noto_Serif({
   weight: ["400", "700"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#4263eb",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export const metadata: Metadata = {
   title: "더터치 Bible — 영어성경 읽기",
   description:
     "더터치 청년부 영어성경 읽기 플랫폼. 함께 읽고, 단어를 배우고, 서로의 진도를 확인하세요.",
   manifest: "/manifest.json",
-  themeColor: "#4263eb",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
 };
 
 export default function RootLayout({
