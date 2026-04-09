@@ -29,7 +29,7 @@ export default function GroupPage() {
 
       const { data: logs } = await supabase
         .from("reading_log")
-        .select("user_id");
+        .select("user_id") as { data: { user_id: string }[] | null };
 
       const countMap: Record<string, number> = {};
       for (const log of logs ?? []) {
