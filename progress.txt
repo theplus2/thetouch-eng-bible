@@ -1,0 +1,24 @@
+## Ralph Session Progress
+Started: 2026-04-09
+
+### US-001 — Migration SQL 파일 생성 [COMPLETE]
+
+**파일 생성됨:**
+- supabase/migrations/20260409000001_initial_schema.sql
+
+**구현 내용:**
+1. 6개 테이블: profiles, reading_log, vocabulary, highlights, reading_plans, plan_enrollments
+2. PRD 대비 추가된 것:
+   - CHECK 제약: book BETWEEN 1 AND 66, chapter/verse >= 1, color IN ('yellow','green','blue','pink'), role IN ('member','admin')
+   - ON DELETE CASCADE 명시
+   - 성능 인덱스 7개 (reading_log: user_id, user+read_at; vocabulary: user_id, user+saved_at; highlights: user+book+chapter; plan_enrollments: user_id)
+   - handle_new_user() SECURITY DEFINER 트리거 — 회원가입 시 profiles 자동 생성
+   - user_reading_stats 뷰 — 랭킹 페이지 집계용
+3. RLS 정책 상세 분리 (FOR SELECT / INSERT / UPDATE / DELETE 각각 별도 정책)
+   - PRD의 "vocab_all USING(auth.uid()=user_id)" 방식보다 명시적으로 분리
+
+**학습/패턴:**
+- handle_new_user 트리거는 SECURITY DEFINER + SET search_path = public 필수
+- 트리거 함수에서 ON CONFLICT (id) DO NOTHING 처리 — Google OAuth 중복 방지
+- reading_plans INSERT 정책: profiles 서브쿼리로 role='admin' 확인
+- user_reading_stats 뷰는 별도 RLS 불필요 (기반 테이블 정책 상속)

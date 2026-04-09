@@ -1,0 +1,470 @@
+{
+  "translation": "WEB",
+  "fullName": "World English Bible",
+  "license": "Public Domain",
+  "totalVerses": 31103,
+  "books": [
+    {
+      "book": 1,
+      "name": "Genesis",
+      "abbr": "Gen",
+      "chapters": 50,
+      "verses": 1533
+    },
+    {
+      "book": 2,
+      "name": "Exodus",
+      "abbr": "Exod",
+      "chapters": 40,
+      "verses": 1213
+    },
+    {
+      "book": 3,
+      "name": "Leviticus",
+      "abbr": "Lev",
+      "chapters": 27,
+      "verses": 859
+    },
+    {
+      "book": 4,
+      "name": "Numbers",
+      "abbr": "Num",
+      "chapters": 36,
+      "verses": 1288
+    },
+    {
+      "book": 5,
+      "name": "Deuteronomy",
+      "abbr": "Deut",
+      "chapters": 34,
+      "verses": 959
+    },
+    {
+      "book": 6,
+      "name": "Joshua",
+      "abbr": "Josh",
+      "chapters": 24,
+      "verses": 658
+    },
+    {
+      "book": 7,
+      "name": "Judges",
+      "abbr": "Judg",
+      "chapters": 21,
+      "verses": 618
+    },
+    {
+      "book": 8,
+      "name": "Ruth",
+      "abbr": "Ruth",
+      "chapters": 4,
+      "verses": 85
+    },
+    {
+      "book": 9,
+      "name": "1 Samuel",
+      "abbr": "1Sam",
+      "chapters": 31,
+      "verses": 810
+    },
+    {
+      "book": 10,
+      "name": "2 Samuel",
+      "abbr": "2Sam",
+      "chapters": 24,
+      "verses": 695
+    },
+    {
+      "book": 11,
+      "name": "1 Kings",
+      "abbr": "1Kgs",
+      "chapters": 22,
+      "verses": 816
+    },
+    {
+      "book": 12,
+      "name": "2 Kings",
+      "abbr": "2Kgs",
+      "chapters": 25,
+      "verses": 719
+    },
+    {
+      "book": 13,
+      "name": "1 Chronicles",
+      "abbr": "1Chr",
+      "chapters": 29,
+      "verses": 942
+    },
+    {
+      "book": 14,
+      "name": "2 Chronicles",
+      "abbr": "2Chr",
+      "chapters": 36,
+      "verses": 822
+    },
+    {
+      "book": 15,
+      "name": "Ezra",
+      "abbr": "Ezra",
+      "chapters": 10,
+      "verses": 280
+    },
+    {
+      "book": 16,
+      "name": "Nehemiah",
+      "abbr": "Neh",
+      "chapters": 13,
+      "verses": 406
+    },
+    {
+      "book": 17,
+      "name": "Esther",
+      "abbr": "Esth",
+      "chapters": 10,
+      "verses": 167
+    },
+    {
+      "book": 18,
+      "name": "Job",
+      "abbr": "Job",
+      "chapters": 42,
+      "verses": 1070
+    },
+    {
+      "book": 19,
+      "name": "Psalms",
+      "abbr": "Ps",
+      "chapters": 150,
+      "verses": 2461
+    },
+    {
+      "book": 20,
+      "name": "Proverbs",
+      "abbr": "Prov",
+      "chapters": 31,
+      "verses": 915
+    },
+    {
+      "book": 21,
+      "name": "Ecclesiastes",
+      "abbr": "Eccl",
+      "chapters": 12,
+      "verses": 222
+    },
+    {
+      "book": 22,
+      "name": "Song of Solomon",
+      "abbr": "Song",
+      "chapters": 8,
+      "verses": 117
+    },
+    {
+      "book": 23,
+      "name": "Isaiah",
+      "abbr": "Isa",
+      "chapters": 66,
+      "verses": 1292
+    },
+    {
+      "book": 24,
+      "name": "Jeremiah",
+      "abbr": "Jer",
+      "chapters": 52,
+      "verses": 1364
+    },
+    {
+      "book": 25,
+      "name": "Lamentations",
+      "abbr": "Lam",
+      "chapters": 5,
+      "verses": 154
+    },
+    {
+      "book": 26,
+      "name": "Ezekiel",
+      "abbr": "Ezek",
+      "chapters": 48,
+      "verses": 1273
+    },
+    {
+      "book": 27,
+      "name": "Daniel",
+      "abbr": "Dan",
+      "chapters": 12,
+      "verses": 357
+    },
+    {
+      "book": 28,
+      "name": "Hosea",
+      "abbr": "Hos",
+      "chapters": 14,
+      "verses": 197
+    },
+    {
+      "book": 29,
+      "name": "Joel",
+      "abbr": "Joel",
+      "chapters": 3,
+      "verses": 73
+    },
+    {
+      "book": 30,
+      "name": "Amos",
+      "abbr": "Amos",
+      "chapters": 9,
+      "verses": 146
+    },
+    {
+      "book": 31,
+      "name": "Obadiah",
+      "abbr": "Obad",
+      "chapters": 1,
+      "verses": 21
+    },
+    {
+      "book": 32,
+      "name": "Jonah",
+      "abbr": "Jonah",
+      "chapters": 4,
+      "verses": 48
+    },
+    {
+      "book": 33,
+      "name": "Micah",
+      "abbr": "Mic",
+      "chapters": 7,
+      "verses": 105
+    },
+    {
+      "book": 34,
+      "name": "Nahum",
+      "abbr": "Nah",
+      "chapters": 3,
+      "verses": 47
+    },
+    {
+      "book": 35,
+      "name": "Habakkuk",
+      "abbr": "Hab",
+      "chapters": 3,
+      "verses": 56
+    },
+    {
+      "book": 36,
+      "name": "Zephaniah",
+      "abbr": "Zeph",
+      "chapters": 3,
+      "verses": 53
+    },
+    {
+      "book": 37,
+      "name": "Haggai",
+      "abbr": "Hag",
+      "chapters": 2,
+      "verses": 38
+    },
+    {
+      "book": 38,
+      "name": "Zechariah",
+      "abbr": "Zech",
+      "chapters": 14,
+      "verses": 211
+    },
+    {
+      "book": 39,
+      "name": "Malachi",
+      "abbr": "Mal",
+      "chapters": 4,
+      "verses": 55
+    },
+    {
+      "book": 40,
+      "name": "Matthew",
+      "abbr": "Matt",
+      "chapters": 28,
+      "verses": 1071
+    },
+    {
+      "book": 41,
+      "name": "Mark",
+      "abbr": "Mark",
+      "chapters": 16,
+      "verses": 678
+    },
+    {
+      "book": 42,
+      "name": "Luke",
+      "abbr": "Luke",
+      "chapters": 24,
+      "verses": 1151
+    },
+    {
+      "book": 43,
+      "name": "John",
+      "abbr": "John",
+      "chapters": 21,
+      "verses": 879
+    },
+    {
+      "book": 44,
+      "name": "Acts",
+      "abbr": "Acts",
+      "chapters": 28,
+      "verses": 1007
+    },
+    {
+      "book": 45,
+      "name": "Romans",
+      "abbr": "Rom",
+      "chapters": 16,
+      "verses": 434
+    },
+    {
+      "book": 46,
+      "name": "1 Corinthians",
+      "abbr": "1Cor",
+      "chapters": 16,
+      "verses": 437
+    },
+    {
+      "book": 47,
+      "name": "2 Corinthians",
+      "abbr": "2Cor",
+      "chapters": 13,
+      "verses": 257
+    },
+    {
+      "book": 48,
+      "name": "Galatians",
+      "abbr": "Gal",
+      "chapters": 6,
+      "verses": 149
+    },
+    {
+      "book": 49,
+      "name": "Ephesians",
+      "abbr": "Eph",
+      "chapters": 6,
+      "verses": 155
+    },
+    {
+      "book": 50,
+      "name": "Philippians",
+      "abbr": "Phil",
+      "chapters": 4,
+      "verses": 104
+    },
+    {
+      "book": 51,
+      "name": "Colossians",
+      "abbr": "Col",
+      "chapters": 4,
+      "verses": 95
+    },
+    {
+      "book": 52,
+      "name": "1 Thessalonians",
+      "abbr": "1Thess",
+      "chapters": 5,
+      "verses": 89
+    },
+    {
+      "book": 53,
+      "name": "2 Thessalonians",
+      "abbr": "2Thess",
+      "chapters": 3,
+      "verses": 47
+    },
+    {
+      "book": 54,
+      "name": "1 Timothy",
+      "abbr": "1Tim",
+      "chapters": 6,
+      "verses": 113
+    },
+    {
+      "book": 55,
+      "name": "2 Timothy",
+      "abbr": "2Tim",
+      "chapters": 4,
+      "verses": 83
+    },
+    {
+      "book": 56,
+      "name": "Titus",
+      "abbr": "Titus",
+      "chapters": 3,
+      "verses": 46
+    },
+    {
+      "book": 57,
+      "name": "Philemon",
+      "abbr": "Phlm",
+      "chapters": 1,
+      "verses": 25
+    },
+    {
+      "book": 58,
+      "name": "Hebrews",
+      "abbr": "Heb",
+      "chapters": 13,
+      "verses": 303
+    },
+    {
+      "book": 59,
+      "name": "James",
+      "abbr": "Jas",
+      "chapters": 5,
+      "verses": 108
+    },
+    {
+      "book": 60,
+      "name": "1 Peter",
+      "abbr": "1Pet",
+      "chapters": 5,
+      "verses": 105
+    },
+    {
+      "book": 61,
+      "name": "2 Peter",
+      "abbr": "2Pet",
+      "chapters": 3,
+      "verses": 61
+    },
+    {
+      "book": 62,
+      "name": "1 John",
+      "abbr": "1John",
+      "chapters": 5,
+      "verses": 105
+    },
+    {
+      "book": 63,
+      "name": "2 John",
+      "abbr": "2John",
+      "chapters": 1,
+      "verses": 13
+    },
+    {
+      "book": 64,
+      "name": "3 John",
+      "abbr": "3John",
+      "chapters": 1,
+      "verses": 14
+    },
+    {
+      "book": 65,
+      "name": "Jude",
+      "abbr": "Jude",
+      "chapters": 1,
+      "verses": 25
+    },
+    {
+      "book": 66,
+      "name": "Revelation",
+      "abbr": "Rev",
+      "chapters": 22,
+      "verses": 404
+    }
+  ]
+}

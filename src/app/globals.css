@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground: #212529;
+  --background: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground: #f8f9fa;
+    --background: #1a1b1e;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 성경 본문 스타일 */
+.bible-text {
+  @apply font-bible leading-relaxed;
+  white-space: pre-wrap;
+}
+
+/* 단어 토큰 스타일 */
+.word-token {
+  @apply cursor-pointer rounded-sm transition-colors duration-150;
+}
+
+.word-token:hover {
+  @apply bg-primary-100;
+}
+
+.word-token:active {
+  @apply bg-primary-200;
+}
+
+/* 스크롤바 스타일 */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-surface-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-surface-400;
+}

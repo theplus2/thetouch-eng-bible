@@ -1,0 +1,174 @@
+{
+  "version": "1.1",
+  "title": "TheTouch ENG Bible — MVP",
+  "description": "PRD Phase 1 (MVP) 전체 구현. F01~F06 기능 완성.",
+  "stories": [
+    {
+      "id": "US-001",
+      "title": "Migration SQL 파일 생성",
+      "description": "PRD 5번 섹션의 모든 테이블과 RLS 정책을 포함한 Supabase migration SQL 파일 생성",
+      "passes": true,
+      "acceptanceCriteria": [
+        "supabase/migrations/20260409000001_initial_schema.sql 파일이 존재함",
+        "profiles, reading_log, vocabulary, highlights, reading_plans, plan_enrollments 6개 테이블 모두 포함",
+        "모든 테이블에 RLS 적용"
+      ]
+    },
+    {
+      "id": "US-002",
+      "title": "Bible JSON 데이터 배치",
+      "description": "bible_web_json.zip에서 성경 JSON 파일을 /public/bible/ 디렉터리에 추출",
+      "passes": false,
+      "acceptanceCriteria": [
+        "/public/bible/bible_index.json 파일이 존재함",
+        "/public/bible/bible_book_01.json 파일이 존재함 (Genesis)",
+        "/public/bible/bible_book_66.json 파일이 존재함 (Revelation)",
+        "총 67개 파일 (bible_index.json + 66권) 존재"
+      ]
+    },
+    {
+      "id": "US-003",
+      "title": "미들웨어 인증 라우트 보호",
+      "description": "미들웨어에서 비로그인 사용자가 /home, /read, /vocabulary, /group 접근 시 /login으로 리다이렉트",
+      "passes": false,
+      "acceptanceCriteria": [
+        "updateSession 후 getUser()로 인증 확인",
+        "비인증 사용자가 보호 라우트(/home, /read, /vocabulary, /group) 접근 시 /login으로 리다이렉트",
+        "이미 로그인한 사용자가 /login, /signup 접근 시 /home으로 리다이렉트",
+        "/onboarding은 로그인 후에만 접근 가능"
+      ]
+    },
+    {
+      "id": "US-004",
+      "title": "로그인 페이지 구현 (F01)",
+      "description": "이메일+비밀번호 로그인 폼 구현. Supabase Auth 연동.",
+      "passes": false,
+      "acceptanceCriteria": [
+        "이메일, 비밀번호 input 필드 존재",
+        "로그인 버튼 클릭 시 supabase.auth.signInWithPassword() 호출",
+        "성공 시 /home으로 리다이렉트",
+        "실패 시 에러 메시지 표시",
+        "회원가입 링크(/signup) 존재"
+      ]
+    },
+    {
+      "id": "US-005",
+      "title": "회원가입 페이지 구현 (F01)",
+      "description": "이메일+비밀번호 회원가입 폼 구현. Supabase Auth 연동.",
+      "passes": false,
+      "acceptanceCriteria": [
+        "이메일, 비밀번호, 비밀번호 확인 input 필드 존재",
+        "회원가입 버튼 클릭 시 supabase.auth.signUp() 호출",
+        "성공 시 /onboarding으로 리다이렉트",
+        "실패(중복 이메일 등) 시 에러 메시지 표시",
+        "로그인 링크(/login) 존재"
+      ]
+    },
+    {
+      "id": "US-006",
+      "title": "온보딩 페이지 구현 (F01)",
+      "description": "닉네임 설정 폼. profiles 테이블에 nickname upsert.",
+      "passes": false,
+      "acceptanceCriteria": [
+        "닉네임 input 필드 존재 (1~20자 제한)",
+        "저장 버튼 클릭 시 profiles 테이블에 nickname upsert",
+        "성공 시 /home으로 리다이렉트",
+        "실패 시 에러 메시지 표시"
+      ]
+    },
+    {
+      "id": "US-007",
+      "title": "성경 읽기 - 책 선택 페이지 (F02)",
+      "description": "/read 페이지에 BookSelector 구현. 구약/신약 탭으로 66권 표시.",
+      "passes": false,
+      "acceptanceCriteria": [
+        "/read 페이지에서 bible_index.json 로드",
+        "구약(1-39) / 신약(40-66) 탭 표시",
+        "각 책 버튼 클릭 시 /read/[book] 로 이동",
+        "읽은 장/전체 장 수 표시 (읽기 기록 기반)"
+      ]
+    },
+    {
+      "id": "US-008",
+      "title": "성경 읽기 - 장 선택 페이지 (F02)",
+      "description": "/read/[book] 페이지에서 해당 책의 장 목록 표시.",
+      "passes": false,
+      "acceptanceCriteria": [
+        "책 이름과 총 장 수 표시",
+        "장 번호 버튼 클릭 시 /read/[book]/[chapter]로 이동",
+        "읽은 장에 체크 표시"
+      ]
+    },
+    {
+      "id": "US-009",
+      "title": "성경 읽기 - 본문 페이지 (F02, F03)",
+      "description": "/read/[book]/[chapter] 페이지에 BibleReader 연동. 읽기 완료 버튼, WordPanel 포함.",
+      "passes": false,
+      "acceptanceCriteria": [
+        "bible_book_XX.json 로드 후 BibleReader 렌더링",
+        "bibleStore에 현재 위치(book, chapter) 저장",
+        "localStorage에 마지막 읽은 위치 저장",
+        "단어 클릭 시 WordPanel 슬라이드업",
+        "'읽기 완료' 버튼 클릭 시 markChapterRead() 호출",
+        "이전/다음 장 ChapterNav 동작"
+      ]
+    },
+    {
+      "id": "US-010",
+      "title": "WordPanel 단어장 저장 연동 (F03)",
+      "description": "WordPanel의 '단어장에 저장' 버튼을 useVocabulary.saveWord()와 연동",
+      "passes": false,
+      "acceptanceCriteria": [
+        "'단어장에 저장' 버튼 클릭 시 saveWord() 호출",
+        "저장 성공 시 버튼이 '저장됨'으로 변경",
+        "이미 저장된 단어는 버튼이 '저장됨' 상태로 표시"
+      ]
+    },
+    {
+      "id": "US-011",
+      "title": "홈 대시보드 구현 (F04)",
+      "description": "/home 페이지에 실제 스트릭, 진도율, 저장 단어 수 표시",
+      "passes": false,
+      "acceptanceCriteria": [
+        "useStreak().calculateStreak() 로 연속 읽기 일수 표시",
+        "읽은 장 수 / 1189 표시 (useReadingLog 기반)",
+        "저장된 단어 수 표시 (useVocabulary 기반)",
+        "마지막으로 읽은 위치로 이동하는 '계속 읽기' 버튼"
+      ]
+    },
+    {
+      "id": "US-012",
+      "title": "단어장 페이지 구현 (F06)",
+      "description": "/vocabulary 페이지에서 저장한 단어 목록 표시 및 삭제",
+      "passes": false,
+      "acceptanceCriteria": [
+        "useVocabulary().getVocabulary()로 단어 목록 로드",
+        "단어, 한글 뜻, 영어 정의, 출처 절 표시",
+        "삭제 버튼 클릭 시 deleteWord() 호출 후 목록 갱신",
+        "저장된 단어 없을 시 빈 상태 메시지 표시"
+      ]
+    },
+    {
+      "id": "US-013",
+      "title": "청년부 현황 페이지 구현 (F05)",
+      "description": "/group 페이지에서 멤버 랭킹과 그룹 전체 진도 표시",
+      "passes": false,
+      "acceptanceCriteria": [
+        "profiles 테이블과 reading_log 집계로 멤버별 읽은 장 수 랭킹 표시",
+        "전체 그룹 진도율 표시 (읽은 총 장 수 / (1189 × 멤버 수))",
+        "닉네임과 읽은 장 수 표시"
+      ]
+    },
+    {
+      "id": "US-014",
+      "title": "GitHub 리포지토리 설정",
+      "description": "git init + remote 설정 + 초기 커밋 + push to https://github.com/theplus2/thetouch-eng-bible.git",
+      "passes": false,
+      "acceptanceCriteria": [
+        "프로젝트 루트에 .git 디렉터리 존재",
+        "origin remote가 https://github.com/theplus2/thetouch-eng-bible.git 로 설정",
+        "초기 커밋이 존재하고 main 브랜치에 push됨"
+      ]
+    }
+  ]
+}
