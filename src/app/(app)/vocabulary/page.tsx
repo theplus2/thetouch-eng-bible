@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useVocabulary } from "@/hooks/useVocabulary";
 import type { Database } from "@/types/database";
 
@@ -11,15 +11,12 @@ export default function VocabularyPage() {
   const [words, setWords] = useState<VocabRow[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const load = useCallback(async () => {
-    const data = await getVocabulary();
-    setWords(data);
-    setLoading(false);
-  }, [getVocabulary]);
-
   useEffect(() => {
-    load();
-  }, [load]);
+    getVocabulary().then((data) => {
+      setWords(data);
+      setLoading(false);
+    });
+  }, [getVocabulary]);
 
   const handleDelete = async (id: number) => {
     await deleteWord(id);

@@ -5,9 +5,7 @@ import Link from "next/link";
 import { useStreak } from "@/hooks/useStreak";
 import { useReadingLog } from "@/hooks/useReadingLog";
 import { useVocabulary } from "@/hooks/useVocabulary";
-import { TOTAL_CHAPTERS } from "@/lib/bible/constants";
-
-const LAST_POS_KEY = "thetouch_last_position";
+import { TOTAL_CHAPTERS, LAST_READING_POS_KEY } from "@/lib/bible/constants";
 
 export default function HomePage() {
   const { calculateStreak } = useStreak();
@@ -21,7 +19,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedPos = localStorage.getItem(LAST_POS_KEY);
+    const savedPos = localStorage.getItem(LAST_READING_POS_KEY);
     if (savedPos) {
       try {
         setLastPos(JSON.parse(savedPos));

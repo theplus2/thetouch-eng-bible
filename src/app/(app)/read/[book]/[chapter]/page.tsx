@@ -8,9 +8,8 @@ import { useBibleStore } from "@/stores/bibleStore";
 import { useReadingLog } from "@/hooks/useReadingLog";
 import BibleReader from "@/components/bible/BibleReader";
 import WordPanel from "@/components/bible/WordPanel";
+import { LAST_READING_POS_KEY } from "@/lib/bible/constants";
 import type { BibleBook, Chapter } from "@/types/bible";
-
-const LAST_POS_KEY = "thetouch_last_position";
 
 export default function ReadChapterPage() {
   const params = useParams();
@@ -39,7 +38,7 @@ export default function ReadChapterPage() {
 
     // 마지막 위치 localStorage 저장
     localStorage.setItem(
-      LAST_POS_KEY,
+      LAST_READING_POS_KEY,
       JSON.stringify({ book: bookNum, chapter: chapterNum })
     );
 

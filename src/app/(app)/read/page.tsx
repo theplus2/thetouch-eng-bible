@@ -6,9 +6,6 @@ import { loadBibleIndex } from "@/lib/bible/loader";
 import { useReadingLog } from "@/hooks/useReadingLog";
 import type { BibleIndex, BookMeta } from "@/types/bible";
 
-const OT_RANGE = [1, 39];
-const NT_RANGE = [40, 66];
-
 export default function ReadPage() {
   const [index, setIndex] = useState<BibleIndex | null>(null);
   const [tab, setTab] = useState<"ot" | "nt">("ot");
@@ -34,10 +31,9 @@ export default function ReadPage() {
     );
   }
 
-  const books =
-    tab === "ot"
-      ? index.books.filter((b) => b.book >= OT_RANGE[0] && b.book <= OT_RANGE[1])
-      : index.books.filter((b) => b.book >= NT_RANGE[0] && b.book <= NT_RANGE[1]);
+  const books = index.books.filter((b) =>
+    tab === "ot" ? b.book <= 39 : b.book >= 40
+  );
 
   return (
     <div className="p-6">

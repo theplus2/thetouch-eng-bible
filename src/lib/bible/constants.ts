@@ -57,6 +57,9 @@ export function isNewTestament(bookNumber: number): boolean {
   return bookNumber >= 40 && bookNumber <= 66;
 }
 
+/** localStorage key for last reading position */
+export const LAST_READING_POS_KEY = "thetouch_last_position";
+
 /** 책 이름 가져오기 */
 export function getBookName(bookNumber: number): string {
   return BOOK_NAMES[bookNumber] ?? `Book ${bookNumber}`;
