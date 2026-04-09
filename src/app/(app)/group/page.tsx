@@ -20,7 +20,7 @@ export default function GroupPage() {
       // 모든 프로필과 읽기 기록 집계
       const { data: profiles } = await supabase
         .from("profiles")
-        .select("id, nickname");
+        .select("id, nickname") as { data: { id: string; nickname: string }[] | null };
 
       if (!profiles) {
         setLoading(false);

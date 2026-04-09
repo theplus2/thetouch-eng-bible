@@ -1,11 +1,1 @@
-{
-  "active": true,
-  "iteration": 1,
-  "max_iterations": 100,
-  "started_at": "2026-04-09T07:40:30.902Z",
-  "prompt": "/ralph PRD에 따라 어디까지 개발이 진행되었는지 확인하고, MVP를 확인하려면 어디까지             \n개발해야할지 확인하고 진행해줘. github 정보를 줄테니 그것도 처리해줘. https://github.com/theplus2/thetouch-eng-bible.git",
-  "session_id": "43bad59f-c321-4354-ae34-cde52ce11a61",
-  "project_path": "C:\\Users\\User\\Desktop\\Coding\\thetouch-engbible",
-  "linked_ultrawork": true,
-  "last_checked_at": "2026-04-09T07:40:30.903Z"
-}
+{"active": false}

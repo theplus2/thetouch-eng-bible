@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"git init && git add -A && git commit -m \\\"feat: initial MVP implementation\\n\\n- DB migration SQL (profiles, reading_log, vocabulary, highlights, reading_plans, plan_enrollments + RLS)\\n- S...",
+  "error": "Exit code 128\nInitialized empty Git repository in C:/Users/User/Desktop/Coding/thetouch-engbible/.git/\nwarning: in the working copy of '.eslintrc.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of '.omc/prd.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of '.omc/project-memory.json', LF will be replaced b...",
+  "timestamp": "2026-04-09T07:46:31.281Z",
+  "retry_count": 1
+}

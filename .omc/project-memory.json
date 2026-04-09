@@ -131,21 +131,39 @@
   },
   "hotPaths": [
     {
+      "path": "src\\app\\(app)\\home\\page.tsx",
+      "accessCount": 8,
+      "lastAccessed": 1775721048848,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\(app)\\group\\page.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1775720988141,
+      "type": "file"
+    },
+    {
       "path": "supabase\\migrations\\20260409000001_initial_schema.sql",
       "accessCount": 5,
       "lastAccessed": 1775720139113,
       "type": "file"
     },
     {
-      "path": "src\\app\\(app)\\home\\page.tsx",
+      "path": "src\\app\\(app)\\read\\[book]\\[chapter]\\page.tsx",
       "accessCount": 5,
-      "lastAccessed": 1775720743594,
+      "lastAccessed": 1775721049573,
       "type": "file"
     },
     {
-      "path": "src\\app\\(app)\\group\\page.tsx",
+      "path": "src\\app\\(app)\\vocabulary\\page.tsx",
       "accessCount": 5,
-      "lastAccessed": 1775720749663,
+      "lastAccessed": 1775721057018,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\(app)\\read\\page.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1775721063295,
       "type": "file"
     },
     {
@@ -155,15 +173,51 @@
       "type": "directory"
     },
     {
-      "path": "PRD.md",
-      "accessCount": 2,
-      "lastAccessed": 1775720451385,
+      "path": "src\\hooks\\useStreak.ts",
+      "accessCount": 3,
+      "lastAccessed": 1775720861136,
+      "type": "file"
+    },
+    {
+      "path": "src\\middleware.ts",
+      "accessCount": 3,
+      "lastAccessed": 1775720976175,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\(auth)\\login\\page.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1775720978837,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\(auth)\\onboarding\\page.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1775720979115,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\(auth)\\signup\\page.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1775720982711,
+      "type": "file"
+    },
+    {
+      "path": "src\\components\\bible\\WordPanel.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1775720988291,
       "type": "file"
     },
     {
       "path": "progress.txt",
+      "accessCount": 3,
+      "lastAccessed": 1775721102498,
+      "type": "file"
+    },
+    {
+      "path": "PRD.md",
       "accessCount": 2,
-      "lastAccessed": 1775720451470,
+      "lastAccessed": 1775720451385,
       "type": "file"
     },
     {
@@ -173,57 +227,21 @@
       "type": "file"
     },
     {
-      "path": "src\\middleware.ts",
-      "accessCount": 2,
-      "lastAccessed": 1775720622669,
-      "type": "file"
-    },
-    {
-      "path": "src\\app\\(auth)\\login\\page.tsx",
-      "accessCount": 2,
-      "lastAccessed": 1775720630537,
-      "type": "file"
-    },
-    {
-      "path": "src\\app\\(auth)\\signup\\page.tsx",
-      "accessCount": 2,
-      "lastAccessed": 1775720638891,
-      "type": "file"
-    },
-    {
-      "path": "src\\app\\(auth)\\onboarding\\page.tsx",
-      "accessCount": 2,
-      "lastAccessed": 1775720646239,
-      "type": "file"
-    },
-    {
-      "path": "src\\app\\(app)\\read\\page.tsx",
-      "accessCount": 2,
-      "lastAccessed": 1775720661159,
-      "type": "file"
-    },
-    {
-      "path": "src\\app\\(app)\\read\\[book]\\[chapter]\\page.tsx",
-      "accessCount": 2,
-      "lastAccessed": 1775720681406,
-      "type": "file"
-    },
-    {
-      "path": "src\\app\\(app)\\vocabulary\\page.tsx",
-      "accessCount": 2,
-      "lastAccessed": 1775720717267,
-      "type": "file"
-    },
-    {
       "path": "src\\types\\database.ts",
       "accessCount": 2,
       "lastAccessed": 1775720735095,
       "type": "file"
     },
     {
-      "path": "src\\components\\bible\\WordPanel.tsx",
+      "path": "src\\app\\(app)\\read\\[book]\\page.tsx",
       "accessCount": 2,
-      "lastAccessed": 1775720765685,
+      "lastAccessed": 1775720986473,
+      "type": "file"
+    },
+    {
+      "path": "src\\lib\\bible\\constants.ts",
+      "accessCount": 2,
+      "lastAccessed": 1775721039793,
       "type": "file"
     },
     {
@@ -311,12 +329,6 @@
       "type": "file"
     },
     {
-      "path": "src\\hooks\\useStreak.ts",
-      "accessCount": 1,
-      "lastAccessed": 1775720528156,
-      "type": "file"
-    },
-    {
       "path": "src\\lib\\dictionary\\freeDictionary.ts",
       "accessCount": 1,
       "lastAccessed": 1775720529891,
@@ -329,21 +341,9 @@
       "type": "file"
     },
     {
-      "path": "src\\app\\(app)\\read\\[book]\\page.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1775720667352,
-      "type": "file"
-    },
-    {
       "path": "src\\types\\bible.ts",
       "accessCount": 1,
       "lastAccessed": 1775720687441,
-      "type": "file"
-    },
-    {
-      "path": "src\\lib\\bible\\constants.ts",
-      "accessCount": 1,
-      "lastAccessed": 1775720735014,
       "type": "file"
     },
     {
@@ -362,6 +362,12 @@
       "path": "tailwind.config.ts",
       "accessCount": 1,
       "lastAccessed": 1775720775959,
+      "type": "file"
+    },
+    {
+      "path": ".env.local",
+      "accessCount": 1,
+      "lastAccessed": 1775721584274,
       "type": "file"
     }
   ],
