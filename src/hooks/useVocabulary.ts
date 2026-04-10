@@ -40,14 +40,42 @@ export function useVocabulary() {
         verse_text: params.verseText ?? null,
       };
 
-      const { data, error } = await supabase
+      // 1. 기존 단어가 있는지 확인
+      const { data: existingData } = await supabase
         .from("vocabulary")
-        .upsert(row as any, { onConflict: "user_id,word" })
-        .select()
-        .single();
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("word", params.word)
+        .maybeSingle();
+      
+      const existing = existingData as unknown as { id: number } | null;
+
+      let dbResult;
+      
+      if (existing && existing.id) {
+        // 이미 있으면 업데이트
+        dbResult = await supabase
+          .from("vocabulary")
+          // @ts-ignore
+          .update(row)
+          .eq("id", existing.id)
+          .select()
+          .single();
+      } else {
+        // 없으면 새로 추가
+        dbResult = await supabase
+          .from("vocabulary")
+          // @ts-ignore
+          .insert([row])
+          .select()
+          .single();
+      }
+
+      const { data, error } = dbResult;
 
       if (error) {
         console.error("[Vocabulary] Save error:", error);
+        alert(`저장 실패: ${error.message}`);
         return null;
       }
       return data;
