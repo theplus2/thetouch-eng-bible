@@ -41,24 +41,42 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
+  // 배경 스크롤 잠금
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center">
       {/* 오버레이 */}
-      <div className="absolute inset-0 bg-black/30 animate-fade-in" />
+      <div 
+        className="absolute inset-0 bg-black/30 animate-fade-in" 
+        onClick={onClose}
+      />
 
       {/* 시트 */}
       <div
         ref={sheetRef}
-        className="relative z-10 w-full max-w-lg rounded-t-2xl bg-surface-50 p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-slide-up"
+        className="relative z-10 flex w-full max-w-lg max-h-[85vh] flex-col rounded-t-2xl bg-surface-50 p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-slide-up"
         role="dialog"
         aria-modal="true"
       >
         {/* 드래그 핸들 */}
-        <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-surface-300" />
+        <div className="mx-auto mb-4 h-1 w-10 shrink-0 rounded-full bg-surface-300" />
 
-        {children}
+        {/* 내부 콘텐츠 (스크롤 영역) */}
+        <div className="overflow-y-auto overscroll-contain pb-2">
+          {children}
+        </div>
       </div>
     </div>
   );
