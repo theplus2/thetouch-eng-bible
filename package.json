@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "ship": "node scripts/push.js"
+    "ship": "node scripts/push.js",
+    "build:dictionary": "node scripts/build-bible-dictionary.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.6.1",

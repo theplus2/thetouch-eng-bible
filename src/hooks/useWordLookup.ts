@@ -14,7 +14,7 @@ import type { DictionaryEntry } from "@/types/dictionary";
  *   1. 세션 캐시 확인
  *   2. 원형 추출 (lemmatize)
  *   3. FreeDictionary: 원문 → 원형 → 원형+e 순으로 폴백
- *   4. MyMemory: 원형으로 번역 (한글 검증 포함)
+ *   4. 한국어 번역: 로컬 사전(web-dictionary.json) → 없으면 DeepL API 폴백
  *   5. 결과 캐시 저장
  */
 export function useWordLookup() {
