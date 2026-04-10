@@ -24,14 +24,6 @@ export interface DictionaryEntry {
   meanings: DictionaryMeaning[];
 }
 
-/** MyMemory Translation API 응답 타입 */
-export interface TranslationResponse {
-  responseData: {
-    translatedText: string;
-    match: number;
-  };
-}
-
 /** 단어 조회 결과 (캐시용 통합 타입) */
 export interface WordLookupResult {
   word: string;

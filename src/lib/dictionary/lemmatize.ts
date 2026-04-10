@@ -99,7 +99,8 @@ export function getLemma(word: string): LemmaResult {
   // 불규칙
   if (IRREGULARS[w]) {
     const [lemma, type] = IRREGULARS[w];
-    return { candidates: [lemma], ruleNote: `${lemma}의 ${type}` };
+    // ruleNote는 bare type만 반환 — hook이 "${effectiveLemma}의 ${ruleNote}"로 조립함
+    return { candidates: [lemma], ruleNote: type };
   }
 
   // -ing (현재분사 / 동명사)
