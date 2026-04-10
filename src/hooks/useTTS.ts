@@ -18,7 +18,8 @@ export function useTTS() {
     (text: string) => {
       if (!supported) return;
 
-      // 이미 재생 중이면 멈춤
+      // 브라우저가 일시정지 상태에 갇혀 있을 수 있으므로 resume을 먼저 호출
+      window.speechSynthesis.resume();
       window.speechSynthesis.cancel();
       setIsPaused(false);
 
@@ -34,7 +35,8 @@ export function useTTS() {
         setIsPlaying(false);
         setIsPaused(false);
       };
-      utterance.onerror = () => {
+      utterance.onerror = (event) => {
+        console.error("TTS Error:", event);
         setIsPlaying(false);
         setIsPaused(false);
       };
@@ -46,6 +48,7 @@ export function useTTS() {
 
   const stop = useCallback(() => {
     if (!supported) return;
+    window.speechSynthesis.resume(); // stuck 방지
     window.speechSynthesis.cancel();
     setIsPlaying(false);
     setIsPaused(false);
@@ -59,7 +62,16 @@ export function useTTS() {
 
   const resume = useCallback(() => {
     if (!supported) return;
+    
+    // 크롬/일부 브라우저 버그 수정: resume이 한 번에 안 먹는 경우 대비
     window.speechSynthesis.resume();
+    
+    if (window.speechSynthesis.paused) {
+      setTimeout(() => {
+        window.speechSynthesis.resume();
+      }, 50);
+    }
+    
     setIsPaused(false);
   }, [supported]);
 
