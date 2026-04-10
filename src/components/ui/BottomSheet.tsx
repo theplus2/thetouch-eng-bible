@@ -44,14 +44,14 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center">
+    <div className="fixed inset-0 z-[100] flex items-end justify-center">
       {/* 오버레이 */}
       <div className="absolute inset-0 bg-black/30 animate-fade-in" />
 
       {/* 시트 */}
       <div
         ref={sheetRef}
-        className="relative z-10 w-full max-w-lg rounded-t-2xl bg-surface-50 p-6 shadow-2xl animate-slide-up"
+        className="relative z-10 w-full max-w-lg rounded-t-2xl bg-surface-50 p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-slide-up"
         role="dialog"
         aria-modal="true"
       >
