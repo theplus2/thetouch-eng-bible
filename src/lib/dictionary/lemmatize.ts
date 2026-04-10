@@ -86,18 +86,11 @@ const IRREGULARS: Record<string, [lemma: string, type: string]> = {
   clad: ['clothe', '과거형'],
 };
 
-const CONSONANTS = 'bcdfghjklmnpqrstvwxyz';
-
-function isConsonant(c: string): boolean {
-  return CONSONANTS.includes(c.toLowerCase());
-}
-
 export interface LemmaResult {
-  lemma: string;
-  /** "pluck의 과거형" 형태로 WordPanel에 표시 */
-  inflectionNote: string | null;
-  /** 원형 찾기에 실패했을 때 추가로 시도할 후보 (e-drop 등) */
-  altLemma: string | null;
+  /** 조회해볼 원형 후보들 (우선순위 순) */
+  candidates: string[];
+  /** "pluck의 과거형" 등으로 조립하기 위한 베이스 텍스트 */
+  ruleNote: string | null;
 }
 
 export function getLemma(word: string): LemmaResult {
@@ -106,28 +99,25 @@ export function getLemma(word: string): LemmaResult {
   // 불규칙
   if (IRREGULARS[w]) {
     const [lemma, type] = IRREGULARS[w];
-    return { lemma, inflectionNote: `${lemma}의 ${type}`, altLemma: null };
+    return { candidates: [lemma], ruleNote: `${lemma}의 ${type}` };
   }
 
   // -ing (현재분사 / 동명사)
   if (w.length > 4 && w.endsWith('ing')) {
-    const stem = w.slice(0, -3);
-    // running → run (자음 중복)
-    if (
-      stem.length >= 3 &&
-      stem.at(-1) === stem.at(-2) &&
-      isConsonant(stem.at(-1)!)
-    ) {
-      const lemma = stem.slice(0, -1);
-      return { lemma, inflectionNote: `${lemma}의 현재분사`, altLemma: null };
+    const stem = w.slice(0, -3); // coming -> com, running -> runn
+    const cands: string[] = [];
+    
+    // 그냥 그대로 우선 확인 (sing -> sing)
+    cands.push(stem);
+    // e-drop 복구 (mak -> make)
+    cands.push(stem + 'e');
+    
+    // 자음 중복 탈락 (runn -> run)
+    if (stem.length >= 3 && stem.at(-1) === stem.at(-2)) {
+      cands.push(stem.slice(0, -1));
     }
-    // coming → come (e탈락) 또는 singing → sing (그대로)
-    // stem을 우선 시도하고, 실패하면 stem+'e'를 altLemma로 제공
-    return {
-      lemma: stem,
-      inflectionNote: null, // lookup 성공 후 채움
-      altLemma: stem + 'e',
-    };
+    
+    return { candidates: cands, ruleNote: '현재분사' };
   }
 
   // -ed (과거형 / 과거분사)
@@ -135,36 +125,59 @@ export function getLemma(word: string): LemmaResult {
     // tried → try
     if (w.endsWith('ied')) {
       const lemma = w.slice(0, -3) + 'y';
-      return { lemma, inflectionNote: `${lemma}의 과거형`, altLemma: null };
+      return { candidates: [lemma], ruleNote: '과거형' };
     }
-    const stem = w.slice(0, -2);
-    // grabbed → grab (자음 중복)
-    if (
-      stem.length >= 3 &&
-      stem.at(-1) === stem.at(-2) &&
-      isConsonant(stem.at(-1)!)
-    ) {
-      const lemma = stem.slice(0, -1);
-      return { lemma, inflectionNote: `${lemma}의 과거형`, altLemma: null };
+    
+    const stem = w.slice(0, -2); // kissed -> kiss, lived -> liv, grabbed -> grabb
+    const cands: string[] = [];
+    
+    // 자음 중복 (grabbed -> grab). ss, ll, ff, zz 등은 예외 처리
+    let isDoubled = false;
+    if (stem.length >= 3 && stem.at(-1) === stem.at(-2)) {
+      const lastChar = stem.at(-1)!;
+      if (!['s', 'l', 'f', 'z'].includes(lastChar)) {
+        cands.push(stem.slice(0, -1)); // grab
+        isDoubled = true;
+      }
     }
-    // plucked → pluck, 또는 loved → love
-    return {
-      lemma: stem,
-      inflectionNote: null,
-      altLemma: stem + 'e',
-    };
+    
+    const lastStemChar = stem.at(-1)!;
+    
+    if (!isDoubled) {
+      // v, c로 끝나는 stem은 원형이 e로 끝날 확률이 99% (liv -> live, danc -> dance)
+      if (['v', 'c'].includes(lastStemChar)) {
+        cands.push(stem + 'e');
+        cands.push(stem);
+      } 
+      // ss, sh, ch, x 등으로 끝나는 경우는 e가 안 붙을 확률이 높음 (kiss -> kiss, wish -> wish)
+      else if (['s', 'h', 'x'].includes(lastStemChar)) {
+        cands.push(stem);
+        cands.push(stem + 'e');
+      } 
+      // 그 외 일반적인 경우: stem (play -> play) 먼저, 그리고 stem+e (bak -> bake)
+      else {
+        cands.push(stem);
+        cands.push(stem + 'e');
+      }
+    } else {
+      // 이중 자음이라 이미 grab을 넣은 경우, 혹시 몰라 원래 형태도 추가
+      cands.push(stem);
+      cands.push(stem + 'e');
+    }
+    
+    return { candidates: cands, ruleNote: '과거형/과거분사' };
   }
 
   // -ies (복수 / 3인칭 단수)
   if (w.endsWith('ies') && w.length > 4) {
     const lemma = w.slice(0, -3) + 'y';
-    return { lemma, inflectionNote: null, altLemma: null };
+    return { candidates: [lemma], ruleNote: '복수/3인칭 단수' };
   }
 
   // possessive
   if (w.endsWith("'s") || w.endsWith('\u2019s')) {
-    return { lemma: w.replace(/'s|'s$/, ''), inflectionNote: null, altLemma: null };
+    return { candidates: [w.replace(/'s|'s$/, '')], ruleNote: null };
   }
 
-  return { lemma: w, inflectionNote: null, altLemma: null };
+  return { candidates: [w], ruleNote: null };
 }

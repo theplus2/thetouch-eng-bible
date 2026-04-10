@@ -27,43 +27,78 @@ export function useWordLookup() {
     const cached = cache.current.get(normalizedWord);
     if (cached) return cached;
 
-    // 2. 원형 추출
-    const { lemma, altLemma, inflectionNote: rawNote } = getLemma(normalizedWord);
+    // 2. 원형 추출 후보 가져오기
+    const { candidates, ruleNote } = getLemma(normalizedWord);
 
-    // 3. FreeDictionary — 원문 → 원형 → 원형+e 순 폴백
+    // 3. FreeDictionary에서 유효한 원형 찾기
     let dictResult: DictionaryEntry | null = null;
-    let resolvedLemma = normalizedWord;
+    let resolvedLemma = candidates[0];
 
-    dictResult = await lookupWord(normalizedWord);
-
-    if (!dictResult && lemma !== normalizedWord) {
-      dictResult = await lookupWord(lemma);
-      if (dictResult) resolvedLemma = lemma;
+    // 먼저 원래 단어 자체로 검색해봄 (사전에 'lived' 같은 항목이 직접 있을 수 있음)
+    const directResult = await lookupWord(normalizedWord);
+    
+    if (directResult) {
+      dictResult = directResult;
+      // 만약 원 단어가 사전에 있는데, candidates 중 하나가 원 단어보다 짧은 원형이라면
+      // 그 원형을 진정한 lemma로 간주할 수도 있음. 
+      // 하지만 FreeDictionary가 정확한 본딧말을 줄 때가 있으므로 일단 넘어감.
+      // 여기서는 candidates를 순회하여 가장 먼저 나오는 사전에 등재된 '원형'을 찾음
     }
 
-    if (!dictResult && altLemma) {
-      dictResult = await lookupWord(altLemma);
-      if (dictResult) resolvedLemma = altLemma;
+    // directResult가 없거나, 원형을 찾고 싶을 때 candidates 확인
+    let bestCandResult: DictionaryEntry | null = null;
+    let fallbackCandResult: DictionaryEntry | null = null;
+    let fallbackCand: string | null = null;
+
+    for (const cand of candidates) {
+      if (cand === normalizedWord && dictResult) {
+        resolvedLemma = cand;
+        break; // 이미 찾았음
+      }
+      
+      const res = await lookupWord(cand);
+      if (res) {
+        // 품사 중에 verb가 있는지 확인 (동사일 확률이 제일 큼)
+        const hasVerb = res.meanings?.some(m => m.partOfSpeech.includes('verb'));
+        if (hasVerb) {
+          bestCandResult = res;
+          resolvedLemma = cand;
+          break; // 완벽한 후보 찾음
+        } else if (!fallbackCandResult) {
+          fallbackCandResult = res; // 일단 첫 번째로 찾은 유효한 단어 임시 저장
+          fallbackCand = cand;
+        }
+      }
+    }
+
+    if (bestCandResult) {
+      dictResult = bestCandResult;
+    } else if (fallbackCandResult && fallbackCand) {
+      dictResult = fallbackCandResult;
+      resolvedLemma = fallbackCand;
     }
 
     // 4. 한국어 번역 전략
-    // - 원형(lemma)과 검색한 단어(word)가 다를 경우, 둘 다 번역 시도
-    const needsLemmaTranslation = lemma !== normalizedWord;
+    const needsLemmaTranslation = resolvedLemma !== normalizedWord;
     
+    // 비동기 번역 병렬 요청
     const [rawWordMeaning, rawDef, rawLemmaMeaning] = await Promise.all([
+      // 1. 원 단어 번역 (lived)
       translateToKorean(normalizedWord),
+      // 2. 검색된 영영사전 뜻 번역
       dictResult?.meanings?.[0]?.definitions?.[0]?.definition 
         ? translateToKorean(dictResult.meanings[0].definitions[0].definition)
         : Promise.resolve(undefined),
-      needsLemmaTranslation ? translateToKorean(lemma) : Promise.resolve(undefined)
+      // 3. 원형 단어 번역 (live)
+      needsLemmaTranslation ? translateToKorean(resolvedLemma) : Promise.resolve(undefined)
     ]);
 
-    // 번역 결과 정제 (원문과 동일한 결과는 제외)
+    // 번역 결과 정제
     const koreanMeaning = (rawWordMeaning && rawWordMeaning.toLowerCase() !== normalizedWord.toLowerCase()) 
       ? rawWordMeaning 
       : undefined;
     
-    const lemmaMeaning = (rawLemmaMeaning && rawLemmaMeaning.toLowerCase() !== lemma.toLowerCase())
+    const lemmaMeaning = (rawLemmaMeaning && rawLemmaMeaning.toLowerCase() !== resolvedLemma.toLowerCase())
       ? rawLemmaMeaning
       : undefined;
 
@@ -71,33 +106,21 @@ export function useWordLookup() {
       ? rawDef
       : undefined;
 
-    // 활용형 노트 완성 (항상 lemma 정보를 바탕으로 생성)
+    // 활용형 노트 완성
     let inflectionNote: string | undefined;
     if (needsLemmaTranslation) {
-      if (rawNote) {
-        inflectionNote = rawNote;
-      } else {
-        // 자동 생성 규칙
-        if (normalizedWord.endsWith('ing')) {
-          inflectionNote = `${lemma}의 현재분사`;
-        } else if (normalizedWord.endsWith('ed') || normalizedWord.endsWith('d')) {
-          inflectionNote = `${lemma}의 과거형`;
-        } else if (normalizedWord.endsWith('ies') || (normalizedWord.endsWith('s') && !lemma.endsWith('s'))) {
-          inflectionNote = `${lemma}의 복수형/3인칭단수`;
-        } else {
-          inflectionNote = `${lemma}의 활용형`;
-        }
-      }
+      inflectionNote = ruleNote ? `${resolvedLemma}의 ${ruleNote}` : `${resolvedLemma}의 활용형`;
     }
 
     const result: WordLookupResult = {
       word: normalizedWord,
-      lemma: needsLemmaTranslation ? lemma : undefined,
+      lemma: needsLemmaTranslation ? resolvedLemma : undefined,
       inflectionNote,
       phonetic: dictResult?.phonetic ?? undefined,
       partOfSpeech: dictResult?.meanings?.[0]?.partOfSpeech ?? undefined,
       englishDef: dictResult?.meanings?.[0]?.definitions?.[0]?.definition ?? undefined,
-      koreanMeaning: koreanMeaning || lemmaMeaning, // 단어 뜻이 없으면 원형 뜻으로 대체
+      // 단어 뜻이 없으면 원형 뜻으로 대체
+      koreanMeaning: koreanMeaning || lemmaMeaning, 
       koreanDef: koreanDef ?? undefined,
       lemmaMeaning: lemmaMeaning ?? undefined,
       isProperNoun: !dictResult && !koreanMeaning && !lemmaMeaning,
