@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 
 export function useTTS() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [rate, setRate] = useState(1.0);
   const [supported, setSupported] = useState(true);
 
@@ -19,14 +20,24 @@ export function useTTS() {
 
       // 이미 재생 중이면 멈춤
       window.speechSynthesis.cancel();
+      setIsPaused(false);
 
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "en-US";
       utterance.rate = rate;
 
-      utterance.onstart = () => setIsPlaying(true);
-      utterance.onend = () => setIsPlaying(false);
-      utterance.onerror = () => setIsPlaying(false);
+      utterance.onstart = () => {
+        setIsPlaying(true);
+        setIsPaused(false);
+      };
+      utterance.onend = () => {
+        setIsPlaying(false);
+        setIsPaused(false);
+      };
+      utterance.onerror = () => {
+        setIsPlaying(false);
+        setIsPaused(false);
+      };
 
       window.speechSynthesis.speak(utterance);
     },
@@ -37,6 +48,19 @@ export function useTTS() {
     if (!supported) return;
     window.speechSynthesis.cancel();
     setIsPlaying(false);
+    setIsPaused(false);
+  }, [supported]);
+
+  const pause = useCallback(() => {
+    if (!supported) return;
+    window.speechSynthesis.pause();
+    setIsPaused(true);
+  }, [supported]);
+
+  const resume = useCallback(() => {
+    if (!supported) return;
+    window.speechSynthesis.resume();
+    setIsPaused(false);
   }, [supported]);
 
   const toggleRate = useCallback(() => {
@@ -56,5 +80,15 @@ export function useTTS() {
     };
   }, []);
 
-  return { isPlaying, rate, speak, stop, toggleRate, supported };
+  return { 
+    isPlaying, 
+    isPaused, 
+    rate, 
+    speak, 
+    stop, 
+    pause, 
+    resume, 
+    toggleRate, 
+    supported 
+  };
 }

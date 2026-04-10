@@ -105,30 +105,58 @@ export default function WordPanel() {
             </div>
           )}
 
-          {/* 한글 뜻 + 설명 */}
-          {(currentWord.koreanMeaning || currentWord.koreanDef) && (
-            <div className="space-y-2">
-              {currentWord.koreanMeaning && (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">🇰🇷</span>
-                  <span className="text-lg font-bold text-surface-900">
-                    {currentWord.koreanMeaning}
-                  </span>
+          {/* 뜻 목록 (복수 정의 지원) */}
+          {currentWord.allMeanings && currentWord.allMeanings.length > 0 ? (
+            <div className="space-y-4">
+              {currentWord.allMeanings.map((m, idx) => (
+                <div key={idx} className="group rounded-xl border border-surface-100 bg-surface-50/50 p-3 transition hover:border-primary-100 hover:bg-white shadow-sm">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-2">
+                        <span className="rounded bg-primary-100 px-1.5 py-0.5 text-[10px] font-bold text-primary-700 uppercase">
+                          {m.partOfSpeech}
+                        </span>
+                        {m.koreanDef && (
+                          <span className="text-base font-bold text-surface-900 group-hover:text-primary-700 transition-colors">
+                            {m.koreanDef}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs leading-relaxed text-surface-500">
+                        {m.definition}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              {/* Fallback: 기존 단일 뜻 노출 방식 */}
+              {(currentWord.koreanMeaning || currentWord.koreanDef) && (
+                <div className="space-y-2">
+                  {currentWord.koreanMeaning && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">🇰🇷</span>
+                      <span className="text-lg font-bold text-surface-900">
+                        {currentWord.koreanMeaning}
+                      </span>
+                    </div>
+                  )}
+                  {currentWord.koreanDef && (
+                    <p className="rounded-lg border border-surface-100 bg-surface-50 p-3 text-sm italic leading-relaxed text-surface-700">
+                      &quot;{currentWord.koreanDef}&quot;
+                    </p>
+                  )}
                 </div>
               )}
-              {currentWord.koreanDef && (
-                <p className="rounded-lg border border-surface-100 bg-surface-50 p-3 text-sm italic leading-relaxed text-surface-700">
-                  &quot;{currentWord.koreanDef}&quot;
+
+              {currentWord.englishDef && (
+                <p className="font-serif text-xs leading-tight text-surface-400">
+                  Definition: {currentWord.englishDef}
                 </p>
               )}
-            </div>
-          )}
-
-          {/* 영어 정의 */}
-          {currentWord.englishDef && (
-            <p className="font-serif text-xs leading-tight text-surface-400">
-              Definition: {currentWord.englishDef}
-            </p>
+            </>
           )}
 
           {/* 고유명사 fallback */}

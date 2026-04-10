@@ -84,28 +84,50 @@ export function useWordLookup() {
     const effectiveLemma = foundViaCandidate ? resolvedLemma : normalizedWord;
     const needsLemmaTranslation = effectiveLemma !== normalizedWord;
 
-    // 품사·정의·번역 모두 동일한 meaning 기준으로 선택
+    // --- 복수 뜻 처리 시작 ---
+    // 1. 사전에서 가져온 전체 뜻 중 상위 3개 추출
+    const topMeanings = dictResult?.meanings?.slice(0, 3) || [];
+    
+    // 2. 병렬 번역 요청 리스트 구성
+    const translationPromises: Promise<string | undefined>[] = [
+      translateToKorean(normalizedWord), // [0] 원어 단어 뜻
+      needsLemmaTranslation ? translateToKorean(effectiveLemma) : Promise.resolve(undefined), // [1] 원형 단어 뜻
+    ];
+
+    // 각 뜻의 첫 번째 정의 번역 추가
+    topMeanings.forEach(m => {
+      const def = m.definitions?.[0]?.definition;
+      translationPromises.push(def ? translateToKorean(def) : Promise.resolve(undefined));
+    });
+
+    const translatedResults = await Promise.all(translationPromises);
+    const rawWordMeaning = translatedResults[0];
+    const rawLemmaMeaning = translatedResults[1];
+    const translatedDefs = translatedResults.slice(2);
+
+    // 3. 결과 객체 조립용 데이터 정제
     const targetMeaning = isVerbInflection
       ? (dictResult?.meanings?.find(m => m.partOfSpeech === 'verb' || m.partOfSpeech.includes('verb'))
           ?? dictResult?.meanings?.[0])
       : dictResult?.meanings?.[0];
     const targetEnglishDef = targetMeaning?.definitions?.[0]?.definition;
 
-    // 4. 한국어 번역 병렬 요청
-    const [rawWordMeaning, rawDef, rawLemmaMeaning] = await Promise.all([
-      translateToKorean(normalizedWord),
-      targetEnglishDef ? translateToKorean(targetEnglishDef) : Promise.resolve(undefined),
-      needsLemmaTranslation ? translateToKorean(effectiveLemma) : Promise.resolve(undefined),
-    ]);
-
-    // 번역 결과 정제 (번역기가 원문 그대로 반환한 경우 버림)
     const koreanMeaning = (rawWordMeaning && rawWordMeaning.toLowerCase() !== normalizedWord.toLowerCase())
       ? rawWordMeaning : undefined;
 
     const lemmaMeaning = (rawLemmaMeaning && rawLemmaMeaning.toLowerCase() !== effectiveLemma.toLowerCase())
       ? rawLemmaMeaning : undefined;
 
-    const koreanDef = (rawDef && rawDef !== targetEnglishDef) ? rawDef : undefined;
+    // allMeanings 배열 생성 (상단에 노출될 메인 뜻 포함)
+    const allMeanings = topMeanings.map((m, idx) => ({
+      partOfSpeech: m.partOfSpeech,
+      definition: m.definitions?.[0]?.definition || "",
+      koreanDef: translatedDefs[idx] !== (m.definitions?.[0]?.definition) ? translatedDefs[idx] : undefined
+    }));
+
+    // 메인 한글 정의 (첫 번째 뜻의 번역)
+    const koreanDef = allMeanings[0]?.koreanDef;
+    // --- 복수 뜻 처리 종료 ---
 
     // 활용형 노트
     let inflectionNote: string | undefined;
@@ -126,6 +148,7 @@ export function useWordLookup() {
       koreanDef: koreanDef ?? undefined,
       lemmaMeaning: lemmaMeaning ?? undefined,
       isProperNoun: !dictResult && !koreanMeaning && !lemmaMeaning,
+      allMeanings: allMeanings.length > 0 ? allMeanings : undefined,
     };
 
     cache.current.set(normalizedWord, result);

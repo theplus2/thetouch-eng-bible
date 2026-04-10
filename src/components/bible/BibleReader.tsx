@@ -6,6 +6,7 @@ import { useWordPanelStore } from "@/stores/wordPanelStore";
 import { useWordLookup } from "@/hooks/useWordLookup";
 import { useBibleStore } from "@/stores/bibleStore";
 import { useJournalStore } from "@/stores/journalStore";
+import FloatingAudioPlayer from "./FloatingAudioPlayer";
 
 interface BibleReaderProps {
   bookName: string;
@@ -17,7 +18,18 @@ interface BibleReaderProps {
  * 각 절을 VerseText 컴포넌트로 렌더링.
  */
 export default function BibleReader({ bookName, chapter }: BibleReaderProps) {
-  const { isPlaying, rate, speak, stop, toggleRate, supported } = useTTS();
+  const { 
+    isPlaying, 
+    isPaused, 
+    rate, 
+    speak, 
+    stop, 
+    pause, 
+    resume, 
+    toggleRate, 
+    supported 
+  } = useTTS();
+  
   const { openPanel, openLoading } = useWordPanelStore();
   const { lookup } = useWordLookup();
   const currentPosition = useBibleStore((s) => s.currentPosition);
@@ -39,7 +51,11 @@ export default function BibleReader({ bookName, chapter }: BibleReaderProps) {
 
   const handlePlayToggle = () => {
     if (isPlaying) {
-      stop();
+      if (isPaused) {
+        resume();
+      } else {
+        pause();
+      }
     } else {
       speak(chapterText);
     }
@@ -103,11 +119,19 @@ export default function BibleReader({ bookName, chapter }: BibleReaderProps) {
             <button
               onClick={handlePlayToggle}
               className={`flex items-center gap-2 rounded-lg px-4 py-1.5 text-sm font-semibold text-white transition ${
-                isPlaying ? "bg-red-500 hover:bg-red-600" : "bg-primary-600 hover:bg-primary-700"
+                isPlaying && !isPaused ? "bg-accent-600 hover:bg-accent-700" : "bg-primary-600 hover:bg-primary-700"
               }`}
             >
-              {isPlaying ? "◾ 중지" : "▶ 읽기"}
+              {isPlaying && !isPaused ? "⏸ 일시정지" : isPaused ? "▶ 계속 읽기" : "▶ 읽기"}
             </button>
+            {(isPlaying || isPaused) && (
+              <button
+                onClick={stop}
+                className="rounded-lg bg-red-500 px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-red-600"
+              >
+                ◾ 정지
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -121,6 +145,17 @@ export default function BibleReader({ bookName, chapter }: BibleReaderProps) {
           />
         ))}
       </div>
+
+      {/* Floating Player */}
+      <FloatingAudioPlayer
+        isPlaying={isPlaying}
+        isPaused={isPaused}
+        rate={rate}
+        onStop={stop}
+        onPause={pause}
+        onResume={resume}
+        onToggleRate={toggleRate}
+      />
     </article>
   );
 }

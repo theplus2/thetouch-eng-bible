@@ -24,6 +24,14 @@ export interface DictionaryEntry {
   meanings: DictionaryMeaning[];
 }
 
+/** 단어 뜻 통합 타입 */
+export interface WordMeaning {
+  partOfSpeech: string;
+  definition: string;
+  koreanMeaning?: string;
+  koreanDef?: string;
+}
+
 /** 단어 조회 결과 (캐시용 통합 타입) */
 export interface WordLookupResult {
   word: string;
@@ -40,4 +48,6 @@ export interface WordLookupResult {
   /** 원형(Lemma)의 한국어 뜻 */
   lemmaMeaning?: string;
   isProperNoun?: boolean;
+  /** 전체 뜻 목록 */
+  allMeanings?: WordMeaning[];
 }
