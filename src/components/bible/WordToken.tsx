@@ -20,6 +20,12 @@ export default function WordToken({ word, verseNumber, verseText }: WordTokenPro
   const currentPosition = useBibleStore((s) => s.currentPosition);
 
   const handleClick = async () => {
+    // 텍스트를 드래그(선택) 중일 때는 단일 클릭 무시
+    const selection = window.getSelection();
+    if (selection && !selection.isCollapsed && selection.toString().trim().length > 0) {
+      return;
+    }
+
     openLoading();
 
     const result = await lookup(word);

@@ -120,6 +120,7 @@ export function useVocabulary() {
   ) => {
     const { error } = await supabase
       .from("vocabulary")
+      // @ts-ignore: Supabase typing issue with manually updated schema fields
       .update({
         next_review_at: srsState.nextReviewAt,
         review_count: srsState.reviewCount,

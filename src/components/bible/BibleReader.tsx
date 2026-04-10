@@ -1,7 +1,7 @@
 import type { Chapter } from "@/types/bible";
 import VerseText from "./VerseText";
 import { useTTS } from "@/hooks/useTTS";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { useWordPanelStore } from "@/stores/wordPanelStore";
 import { useWordLookup } from "@/hooks/useWordLookup";
 import { useBibleStore } from "@/stores/bibleStore";
@@ -33,40 +33,47 @@ export default function BibleReader({ bookName, chapter }: BibleReaderProps) {
     }
   };
 
-  const handleSelection = async () => {
-    const selection = window.getSelection();
-    if (!selection) return;
-    
-    const text = selection.toString().trim();
-    // 2단어 이상, 50자 이하인 경우 (너무 긴 문장 제외)
-    if (text.includes(" ") && text.length > 3 && text.length <= 50) {
-      openLoading();
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    const handleSelectionChange = () => {
+      clearTimeout(timeoutId);
       
-      // 검색 시도
-      const result = await lookup(text);
-      if (result.koreanMeaning || result.englishDef || result.koreanDef) {
-        openPanel(result, {
-          book: currentPosition?.book ?? 0,
-          chapter: chapter.c,
-          verse: 0, // 여러 절에 걸칠 수 있으므로 0으로 처리하거나 생략
-          verseText: text,
-        });
-      } else {
-         // 번역 결과가 없으면 패널 닫기 (또는 띄우지 않기)
-         useWordPanelStore.getState().closePanel();
-      }
-      
-      // 선택 영역 해제 (옵션)
-      selection.removeAllRanges();
-    }
-  };
+      timeoutId = setTimeout(async () => {
+        const selection = window.getSelection();
+        if (!selection || selection.isCollapsed) return;
+        
+        const text = selection.toString().trim();
+        
+        // 2단어 이상, 50자 이하인 경우 (단일 단어는 WordToken 클릭으로 처리)
+        if (text.includes(" ") && text.length > 3 && text.length <= 50) {
+          openLoading();
+          
+          const result = await lookup(text);
+          if (result.koreanMeaning || result.englishDef || result.koreanDef) {
+            openPanel(result, {
+              book: currentPosition?.book ?? 0,
+              chapter: chapter.c,
+              verse: 0,
+              verseText: text,
+            });
+          } else {
+             useWordPanelStore.getState().closePanel();
+          }
+          // 모바일 사용자 경험을 위해 선택을 강제로 해제하지 않음
+        }
+      }, 600); // 드래그가 끝날 때까지 충분히 대기
+    };
+
+    document.addEventListener("selectionchange", handleSelectionChange);
+    return () => {
+      document.removeEventListener("selectionchange", handleSelectionChange);
+      clearTimeout(timeoutId);
+    };
+  }, [lookup, openPanel, openLoading, currentPosition, chapter.c]);
 
   return (
-    <article 
-      className="mx-auto max-w-2xl px-4 py-6"
-      onMouseUp={handleSelection}
-      onTouchEnd={handleSelection}
-    >
+    <article className="mx-auto max-w-2xl px-4 py-6">
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h2 className="text-xl font-bold text-surface-800">
           {bookName} {chapter.c}
