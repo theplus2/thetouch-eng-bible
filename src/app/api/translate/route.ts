@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+/**
+ * Google Translate 비공식 무료 API 경유 번역 엔드포인트.
+ * API 키 불필요. 소규모 트래픽(성경 앱) 수준에서 안정적으로 동작.
+ */
 export async function POST(req: NextRequest) {
   let body: { text?: unknown };
   try {
@@ -13,42 +17,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ translation: null }, { status: 400 });
   }
 
-  const apiKey = process.env.DEEPL_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json({ translation: null }, { status: 500 });
-  }
-
-  // DeepL Pro 키는 보통 :fx 접미사가 없습니다.
-  const isFreePlan = apiKey.endsWith(':fx');
-  const baseUrl = isFreePlan 
-    ? 'https://api-free.deepl.com/v2/translate' 
-    : 'https://api.deepl.com/v2/translate';
-
   try {
-    const res = await fetch(baseUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `DeepL-Auth-Key ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        text: [text], 
-        target_lang: 'KO',
-        // 문맥 파악을 위해 소스 언어를 지정하지만, 때로는 누락 데이터 대응을 위해 생략 가능
-      }),
-    });
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ko&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
 
     if (!res.ok) {
-      const errText = await res.text();
-      console.error(`[DeepL Error] status: ${res.status}, body: ${errText}`);
+      console.error(`[GoogleTranslate] status: ${res.status}`);
       return NextResponse.json({ translation: null });
     }
 
     const data = await res.json();
-    const translation = data.translations?.[0]?.text ?? null;
+    // 응답 형식: [[[번역문, 원문, ...], ...], null, "en", ...]
+    const translation: string | null = data?.[0]?.[0]?.[0] ?? null;
     return NextResponse.json({ translation });
   } catch (err) {
-    console.error(`[DeepL Fetch Error]`, err);
+    console.error('[GoogleTranslate] Fetch error:', err);
     return NextResponse.json({ translation: null });
   }
 }
