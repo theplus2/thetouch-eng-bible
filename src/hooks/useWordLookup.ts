@@ -89,7 +89,7 @@ export function useWordLookup() {
     const topMeanings = dictResult?.meanings?.slice(0, 3) || [];
     
     // 2. 병렬 번역 요청 리스트 구성
-    const translationPromises: Promise<string | undefined>[] = [
+    const translationPromises: Promise<string | null | undefined>[] = [
       translateToKorean(normalizedWord), // [0] 원어 단어 뜻
       needsLemmaTranslation ? translateToKorean(effectiveLemma) : Promise.resolve(undefined), // [1] 원형 단어 뜻
     ];

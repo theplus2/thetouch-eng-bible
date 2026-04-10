@@ -26,8 +26,8 @@ export default function WordPanel() {
     
     const result = await saveWord({
       word: currentWord.word,
-      koreanMeaning: korean,
-      englishDef: currentWord.englishDef,
+      koreanMeaning: korean ?? undefined,
+      englishDef: currentWord.englishDef ?? undefined,
       partOfSpeech: currentWord.partOfSpeech,
       book: verseContext?.book,
       chapter: verseContext?.chapter,

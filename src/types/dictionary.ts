@@ -28,8 +28,8 @@ export interface DictionaryEntry {
 export interface WordMeaning {
   partOfSpeech: string;
   definition: string;
-  koreanMeaning?: string;
-  koreanDef?: string;
+  koreanMeaning?: string | null;
+  koreanDef?: string | null;
 }
 
 /** 단어 조회 결과 (캐시용 통합 타입) */
@@ -42,11 +42,11 @@ export interface WordLookupResult {
   phonetic?: string;
   partOfSpeech?: string;
   englishDef?: string;
-  koreanMeaning?: string;
+  koreanMeaning?: string | null;
   /** 한국어 뜻 풀이/정의 */
-  koreanDef?: string;
+  koreanDef?: string | null;
   /** 원형(Lemma)의 한국어 뜻 */
-  lemmaMeaning?: string;
+  lemmaMeaning?: string | null;
   isProperNoun?: boolean;
   /** 전체 뜻 목록 */
   allMeanings?: WordMeaning[];
