@@ -20,9 +20,14 @@ export function useTTS() {
 
   // 실제 다음 문장을 재생하는 내부 함수
   const playNext = useCallback(() => {
-    if (!supported) return;
+    if (!supported || typeof window === "undefined") return;
     
     const synth = window.speechSynthesis;
+    
+    // 이전에 남아있던 것들을 확실히 정리 (큐가 꼬이는 것 방지)
+    if (currentIndexRef.current === 0) {
+      synth.cancel();
+    }
     
     // 더 이상 읽을 문장이 없으면 종료
     if (currentIndexRef.current >= sentencesRef.current.length) {
@@ -48,43 +53,55 @@ export function useTTS() {
     };
 
     utterance.onend = () => {
-      // 멈춘 상태(Pause)가 아닐 때만 다음 문장으로 진행
-      if (window.speechSynthesis.speaking || !window.speechSynthesis.paused) {
-        currentIndexRef.current++;
-        playNext();
-      }
+      // 멈춘 상태(Paused)가 아닐 때만 다음으로 진행
+      if (!currentIndexRef.current && !isPlaying) return; // 이미 종료된 경우 방지
+
+      currentIndexRef.current++;
+      // 약간의 지연을 주어 브라우저 리소스 반환 시간을 줌
+      setTimeout(() => {
+        if (!isPaused) {
+          playNext();
+        }
+      }, 50);
     };
 
     utterance.onerror = (event) => {
-      console.error("TTS Utterance Error:", event);
-      // 인터럽트된 경우가 아니면 다음으로 진행
+      // interrupted는 pause/stop 시 발생하므로 에러 로그에서 제외
       if (event.error !== 'interrupted') {
+        console.error("TTS Utterance Error:", event);
         currentIndexRef.current++;
         playNext();
       }
     };
 
     synth.speak(utterance);
-  }, [rate, supported]);
+  }, [rate, supported, isPaused, isPlaying]);
 
   const speak = useCallback(
     (text: string) => {
       if (!supported) return;
 
+      // 1. 상태 초기화
       window.speechSynthesis.cancel();
+      setIsPlaying(false);
+      setIsPaused(false);
       
-      // 텍스트 정제 및 문장 분리
-      // [1] 등 절 번호 제거 및 문장 단위 분리
-      const sanitized = text.replace(/\[\d+\]|\b\d+\b/g, "").trim();
+      // 2. 텍스트 정제 및 문장 분리
+      // [1] 등 절 번호 제거 및 불필요한 공백 정리
+      const sanitized = text.replace(/\[\d+\]|\b\d+\b/g, " ").replace(/\s+/g, " ").trim();
+      
+      // 문장 단위 분리 기법 (더 정교하게)
       const sentences = sanitized.split(/(?<=[.!?])\s+/);
       
-      sentencesRef.current = sentences.filter(s => s.trim().length > 0);
+      sentencesRef.current = sentences.filter(s => s.trim().length > 2); // 아주 짧은 파편 제거
       currentIndexRef.current = 0;
       
       if (sentencesRef.current.length > 0) {
-        setIsPlaying(true);
-        setIsPaused(false);
-        playNext();
+        // 3. 브라우저가 cancel을 처리할 시간을 준 뒤 시작
+        setTimeout(() => {
+          setIsPlaying(true);
+          playNext();
+        }, 100);
       }
     },
     [supported, playNext]
