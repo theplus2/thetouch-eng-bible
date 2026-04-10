@@ -21,24 +21,24 @@ export default function FlashCardSession({ words }: FlashCardSessionProps) {
 
   const handleFlip = useCallback(() => setFlipped((f) => !f), []);
 
-  const handleKnow = useCallback(() => {
-    setKnown((prev) => new Set(prev).add(current.id));
-    advance();
-  }, [current, index, deck]);
-
-  const handleAgain = useCallback(() => {
-    setAgain((prev) => new Set(prev).add(current.id));
-    advance();
-  }, [current, index, deck]);
-
-  function advance() {
+  const advance = useCallback(() => {
     setFlipped(false);
     if (index + 1 >= deck.length) {
       setDone(true);
     } else {
       setIndex((i) => i + 1);
     }
-  }
+  }, [index, deck.length]);
+
+  const handleKnow = useCallback(() => {
+    setKnown((prev) => new Set(prev).add(current.id));
+    advance();
+  }, [current, advance]);
+
+  const handleAgain = useCallback(() => {
+    setAgain((prev) => new Set(prev).add(current.id));
+    advance();
+  }, [current, advance]);
 
   const handleRestart = useCallback(() => {
     setDeck(shuffle([...words]));

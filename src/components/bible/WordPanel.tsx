@@ -72,17 +72,28 @@ export default function WordPanel() {
 
           <hr className="border-surface-200" />
 
-          {/* 한글 뜻 */}
-          {currentWord.koreanMeaning && (
-            <div>
-              <span className="mr-2">🇰🇷</span>
-              <span className="text-surface-800">{currentWord.koreanMeaning}</span>
+          {/* 한글 뜻 + 설명 */}
+          {(currentWord.koreanMeaning || currentWord.koreanDef) && (
+            <div className="space-y-2">
+              {currentWord.koreanMeaning && (
+                <div>
+                  <span className="mr-2">🇰🇷</span>
+                  <span className="font-semibold text-surface-900">{currentWord.koreanMeaning}</span>
+                </div>
+              )}
+              {currentWord.koreanDef && (
+                <p className="text-sm leading-relaxed text-surface-700 bg-surface-50 p-3 rounded-lg border border-surface-100 italic">
+                  &quot;{currentWord.koreanDef}&quot;
+                </p>
+              )}
             </div>
           )}
 
           {/* 영어 정의 */}
           {currentWord.englishDef && (
-            <p className="text-sm text-surface-600">{currentWord.englishDef}</p>
+            <p className="text-xs text-surface-400 font-serif leading-tight">
+              Definition: {currentWord.englishDef}
+            </p>
           )}
 
           {/* 고유명사 fallback */}

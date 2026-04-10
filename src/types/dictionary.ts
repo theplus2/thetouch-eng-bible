@@ -43,5 +43,7 @@ export interface WordLookupResult {
   partOfSpeech?: string;
   englishDef?: string;
   koreanMeaning?: string;
+  /** 한국어 뜻 풀이/정의 */
+  koreanDef?: string;
   isProperNoun?: boolean;
 }

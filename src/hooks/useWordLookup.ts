@@ -48,7 +48,12 @@ export function useWordLookup() {
 
     // 4. 한국어 번역 — 원형(resolvedLemma)으로 번역해야 품질이 좋음
     const translationTarget = resolvedLemma !== normalizedWord ? resolvedLemma : normalizedWord;
-    const koreanMeaning = await translateToKorean(translationTarget);
+    const [koreanMeaning, koreanDef] = await Promise.all([
+      translateToKorean(translationTarget),
+      dictResult?.meanings?.[0]?.definitions?.[0]?.definition 
+        ? translateToKorean(dictResult.meanings[0].definitions[0].definition)
+        : Promise.resolve(undefined)
+    ]);
 
     // 활용형 노트 완성 (rawNote가 null인 경우 resolvedLemma로 생성)
     let inflectionNote: string | undefined;
@@ -75,6 +80,7 @@ export function useWordLookup() {
       partOfSpeech: dictResult?.meanings?.[0]?.partOfSpeech ?? undefined,
       englishDef: dictResult?.meanings?.[0]?.definitions?.[0]?.definition ?? undefined,
       koreanMeaning: koreanMeaning ?? undefined,
+      koreanDef: koreanDef ?? undefined,
       isProperNoun: !dictResult && !koreanMeaning,
     };
 
