@@ -1,6 +1,6 @@
 {
-  "name": "더터치 Bible",
-  "short_name": "터치Bible",
+  "name": "더터치 영어 성경",
+  "short_name": "더터치영어성경",
   "description": "더터치 청년부 영어 성경 읽기 앱",
   "start_url": "/",
   "display": "standalone",

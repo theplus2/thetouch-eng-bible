@@ -16,7 +16,7 @@ const notoSerif = Noto_Serif({
 })
 
 const APP_URL = 'https://thetouch-eng-bible.vercel.app'
-const APP_NAME = '더터치 Bible'
+const APP_NAME = '더터치 영어 성경'
 const APP_DESC = '더터치 청년부 영어 성경 읽기 앱 — 단어를 누르면 한글 뜻이 바로!'
 
 export const viewport: Viewport = {
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   // ── iOS PWA ──────────────────────────────────────────
   appleWebApp: {
     capable: true,
-    title: '터치Bible',
+    title: '더터치영어성경',
     statusBarStyle: 'black-translucent',
   },
 
