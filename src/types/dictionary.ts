@@ -45,5 +45,7 @@ export interface WordLookupResult {
   koreanMeaning?: string;
   /** 한국어 뜻 풀이/정의 */
   koreanDef?: string;
+  /** 원형(Lemma)의 한국어 뜻 */
+  lemmaMeaning?: string;
   isProperNoun?: boolean;
 }

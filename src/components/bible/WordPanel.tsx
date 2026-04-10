@@ -72,17 +72,43 @@ export default function WordPanel() {
 
           <hr className="border-surface-200" />
 
+          {/* 원형 정보 (활용형일 때만 표시) */}
+          {currentWord.lemma && (
+            <div className="rounded-xl border border-primary-100 bg-primary-50/50 p-3">
+              <div className="flex items-center gap-2">
+                <span className="rounded bg-primary-600 px-1.5 py-0.5 text-[10px] font-bold text-white uppercase">
+                  Root
+                </span>
+                <span className="text-sm font-bold text-surface-900">
+                  {currentWord.lemma}
+                </span>
+                {currentWord.lemmaMeaning && (
+                  <span className="text-xs text-primary-700">
+                    ({currentWord.lemmaMeaning})
+                  </span>
+                )}
+              </div>
+              {currentWord.inflectionNote && (
+                <p className="mt-1 text-[11px] text-surface-500">
+                  {currentWord.inflectionNote}
+                </p>
+              )}
+            </div>
+          )}
+
           {/* 한글 뜻 + 설명 */}
           {(currentWord.koreanMeaning || currentWord.koreanDef) && (
             <div className="space-y-2">
               {currentWord.koreanMeaning && (
-                <div>
-                  <span className="mr-2">🇰🇷</span>
-                  <span className="font-semibold text-surface-900">{currentWord.koreanMeaning}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm">🇰🇷</span>
+                  <span className="text-lg font-bold text-surface-900">
+                    {currentWord.koreanMeaning}
+                  </span>
                 </div>
               )}
               {currentWord.koreanDef && (
-                <p className="text-sm leading-relaxed text-surface-700 bg-surface-50 p-3 rounded-lg border border-surface-100 italic">
+                <p className="rounded-lg border border-surface-100 bg-surface-50 p-3 text-sm italic leading-relaxed text-surface-700">
                   &quot;{currentWord.koreanDef}&quot;
                 </p>
               )}
@@ -91,13 +117,13 @@ export default function WordPanel() {
 
           {/* 영어 정의 */}
           {currentWord.englishDef && (
-            <p className="text-xs text-surface-400 font-serif leading-tight">
+            <p className="font-serif text-xs leading-tight text-surface-400">
               Definition: {currentWord.englishDef}
             </p>
           )}
 
           {/* 고유명사 fallback */}
-          {currentWord.isProperNoun && !currentWord.englishDef && (
+          {currentWord.isProperNoun && !currentWord.englishDef && !currentWord.koreanMeaning && !currentWord.lemmaMeaning && (
             <p className="text-sm italic text-surface-500">
               성경 고유명사입니다.
             </p>
