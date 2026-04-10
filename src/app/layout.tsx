@@ -60,14 +60,6 @@ export const metadata: Metadata = {
     siteName: APP_NAME,
     title: APP_NAME,
     description: APP_DESC,
-    images: [
-      {
-        url: `${APP_URL}/og-image.png`,
-        width: 1200,
-        height: 630,
-        alt: '더터치 Bible — 영어 성경 읽기',
-      },
-    ],
     locale: 'ko_KR',
   },
 
@@ -76,7 +68,6 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: APP_NAME,
     description: APP_DESC,
-    images: [`${APP_URL}/og-image.png`],
   },
 
   // ── iOS PWA ──────────────────────────────────────────
@@ -88,7 +79,6 @@ export const metadata: Metadata = {
 
   // ── 기타 ────────────────────────────────────────────
   metadataBase: new URL(APP_URL),
-  robots: { index: false, follow: false }, // 내부 앱 — 검색 노출 차단
 }
 
 export default function RootLayout({
