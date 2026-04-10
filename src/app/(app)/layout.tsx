@@ -27,6 +27,10 @@ export default function AppLayout({
             <span className="text-lg">👥</span>
             <span>청년부</span>
           </a>
+          <a href="/journal" className="flex flex-col items-center gap-1 px-3 py-1 text-xs text-surface-600 hover:text-primary-600">
+            <span className="text-lg">✏️</span>
+            <span>일지</span>
+          </a>
         </div>
       </nav>
 
@@ -48,6 +52,9 @@ export default function AppLayout({
           </a>
           <a href="/group" className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-surface-700 hover:bg-primary-100 hover:text-primary-700">
             <span>👥</span> 청년부 현황
+          </a>
+          <a href="/journal" className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-surface-700 hover:bg-primary-100 hover:text-primary-700">
+            <span>✏️</span> 묵상 일지
           </a>
         </nav>
         <div className="absolute bottom-0 left-0 right-0 border-t border-surface-200 p-3">

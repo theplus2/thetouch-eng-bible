@@ -8,6 +8,7 @@ import { useBibleStore } from "@/stores/bibleStore";
 import { useReadingLog } from "@/hooks/useReadingLog";
 import BibleReader from "@/components/bible/BibleReader";
 import WordPanel from "@/components/bible/WordPanel";
+import JournalSheet from "@/components/journal/JournalSheet";
 import { LAST_READING_POS_KEY } from "@/lib/bible/constants";
 import type { BibleBook, Chapter } from "@/types/bible";
 
@@ -122,6 +123,8 @@ export default function ReadChapterPage() {
 
       {/* WordPanel */}
       <WordPanel />
+      {/* 묵상 저널 시트 */}
+      <JournalSheet />
     </div>
   );
 }

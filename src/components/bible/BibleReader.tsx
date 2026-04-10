@@ -1,10 +1,11 @@
-import type { Chapter } from "@/types/bible";
+import type { Chapter, Verse } from "@/types/bible";
 import VerseText from "./VerseText";
 import { useTTS } from "@/hooks/useTTS";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useCallback } from "react";
 import { useWordPanelStore } from "@/stores/wordPanelStore";
 import { useWordLookup } from "@/hooks/useWordLookup";
 import { useBibleStore } from "@/stores/bibleStore";
+import { useJournalStore } from "@/stores/journalStore";
 
 interface BibleReaderProps {
   bookName: string;
@@ -20,6 +21,17 @@ export default function BibleReader({ bookName, chapter }: BibleReaderProps) {
   const { openPanel, openLoading } = useWordPanelStore();
   const { lookup } = useWordLookup();
   const currentPosition = useBibleStore((s) => s.currentPosition);
+  const { openSheet } = useJournalStore();
+
+  const handleVersePress = useCallback((verse: Verse) => {
+    openSheet({
+      book: currentPosition?.book ?? 0,
+      chapter: chapter.c,
+      verse: verse.v,
+      verseText: verse.t,
+      bookName,
+    });
+  }, [openSheet, currentPosition, chapter.c, bookName]);
 
   const chapterText = useMemo(() => {
     return chapter.verses.map((v) => v.t).join(" ");
@@ -105,6 +117,7 @@ export default function BibleReader({ bookName, chapter }: BibleReaderProps) {
           <VerseText
             key={verse.v}
             verse={verse}
+            onVersePress={handleVersePress}
           />
         ))}
       </div>

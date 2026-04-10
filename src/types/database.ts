@@ -208,6 +208,56 @@ export interface Database {
           }
         ];
       };
+      journals: {
+        Row: {
+          id: number;
+          user_id: string;
+          book: number;
+          chapter: number;
+          verse: number;
+          verse_text: string;
+          body: string;
+          corrected_body: string | null;
+          correction_applied: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: number;
+          user_id: string;
+          book: number;
+          chapter: number;
+          verse: number;
+          verse_text: string;
+          body?: string;
+          corrected_body?: string | null;
+          correction_applied?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: number;
+          user_id?: string;
+          book?: number;
+          chapter?: number;
+          verse?: number;
+          verse_text?: string;
+          body?: string;
+          corrected_body?: string | null;
+          correction_applied?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "journals_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       plan_enrollments: {
         Row: {
           id: number;
