@@ -35,6 +35,10 @@ export interface TranslationResponse {
 /** 단어 조회 결과 (캐시용 통합 타입) */
 export interface WordLookupResult {
   word: string;
+  /** 사전에서 조회한 원형 (plucked → pluck) */
+  lemma?: string;
+  /** 활용형 설명 (예: "pluck의 과거형") */
+  inflectionNote?: string;
   phonetic?: string;
   partOfSpeech?: string;
   englishDef?: string;

@@ -2,14 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useVocabulary } from "@/hooks/useVocabulary";
+import FlashCardSession from "@/components/vocabulary/FlashCard";
 import type { Database } from "@/types/database";
 
 type VocabRow = Database["public"]["Tables"]["vocabulary"]["Row"];
+type Tab = "list" | "flashcard";
 
 export default function VocabularyPage() {
   const { getVocabulary, deleteWord } = useVocabulary();
   const [words, setWords] = useState<VocabRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<Tab>("list");
 
   useEffect(() => {
     getVocabulary().then((data) => {
@@ -25,12 +28,49 @@ export default function VocabularyPage() {
 
   return (
     <div className="p-6">
-      <h1 className="mb-6 text-2xl font-bold">단어장</h1>
+      {/* 헤더 */}
+      <div className="mb-5 flex items-center justify-between">
+        <h1 className="text-2xl font-bold">단어장</h1>
+        {words.length > 0 && (
+          <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-700">
+            {words.length}개
+          </span>
+        )}
+      </div>
 
+      {/* 탭 */}
+      {!loading && words.length > 0 && (
+        <div className="mb-5 flex rounded-xl border border-surface-200 bg-surface-100 p-1">
+          <button
+            onClick={() => setTab("list")}
+            className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${
+              tab === "list"
+                ? "bg-white text-surface-900 shadow-sm"
+                : "text-surface-500"
+            }`}
+          >
+            목록
+          </button>
+          <button
+            onClick={() => setTab("flashcard")}
+            className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${
+              tab === "flashcard"
+                ? "bg-white text-surface-900 shadow-sm"
+                : "text-surface-500"
+            }`}
+          >
+            플래시카드
+          </button>
+        </div>
+      )}
+
+      {/* 로딩 */}
       {loading ? (
         <div className="flex h-40 items-center justify-center">
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-200 border-t-primary-600" />
         </div>
+      ) : tab === "flashcard" ? (
+        <FlashCardSession words={words} />
       ) : words.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-surface-300 bg-white/50 py-16 text-center">
           <p className="text-3xl">📝</p>
@@ -69,7 +109,7 @@ export default function VocabularyPage() {
               </div>
               <button
                 onClick={() => handleDelete(w.id)}
-                className="ml-4 rounded-lg p-1.5 text-surface-400 hover:bg-red-50 hover:text-red-500 transition"
+                className="ml-4 rounded-lg p-1.5 text-surface-400 transition hover:bg-red-50 hover:text-red-500"
                 aria-label="삭제"
               >
                 ✕

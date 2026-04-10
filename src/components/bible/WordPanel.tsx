@@ -53,16 +53,21 @@ export default function WordPanel() {
             <h3 className="text-xl font-bold text-surface-900">
               {currentWord.word}
             </h3>
-            <p className="mt-1 text-sm text-surface-500">
+            <div className="mt-1 flex flex-wrap items-center gap-1.5">
               {currentWord.phonetic && (
-                <span className="mr-2">{currentWord.phonetic}</span>
+                <span className="text-sm text-surface-500">{currentWord.phonetic}</span>
               )}
               {currentWord.partOfSpeech && (
                 <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700">
                   {currentWord.partOfSpeech}
                 </span>
               )}
-            </p>
+              {currentWord.inflectionNote && (
+                <span className="rounded-full bg-surface-100 px-2 py-0.5 text-xs text-surface-500">
+                  {currentWord.inflectionNote}
+                </span>
+              )}
+            </div>
           </div>
 
           <hr className="border-surface-200" />
