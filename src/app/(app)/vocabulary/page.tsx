@@ -15,10 +15,17 @@ export default function VocabularyPage() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("flashcard"); // 기본탭을 플래시카드로 변경
 
+  const [dbError, setDbError] = useState(false);
+
   useEffect(() => {
     Promise.all([getVocabulary(), getDueVocabulary()]).then(([allData, dueData]) => {
       setWords(allData);
-      setDueWords(dueData);
+      if (dueData === null) {
+        setDbError(true);
+        setDueWords(allData); // DB 에러 시 일단 모든 단어를 보여줌
+      } else {
+        setDueWords(dueData);
+      }
       setLoading(false);
     });
   }, [getVocabulary, getDueVocabulary]);
@@ -39,6 +46,13 @@ export default function VocabularyPage() {
           </span>
         )}
       </div>
+
+      {dbError && (
+        <div className="mb-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          <p className="font-bold">⚠️ 데이터베이스 업데이트 필요</p>
+          <p className="mt-1">망각 곡선 기능을 위한 테이블 설정(SQL)이 반영되지 않았습니다. 현재 기본 모드로 작동합니다.</p>
+        </div>
+      )}
 
       {/* 탭 */}
       {!loading && words.length > 0 && (

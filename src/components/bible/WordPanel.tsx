@@ -20,9 +20,13 @@ export default function WordPanel() {
   const handleSave = async () => {
     if (!currentWord || saved) return;
     setSaving(true);
-    await saveWord({
+    
+    // 긴 번역결과가 koreanMeaning으로 들어가지 않고 koreanDef로 들어갈 때 보정
+    const korean = currentWord.koreanMeaning || currentWord.koreanDef;
+    
+    const result = await saveWord({
       word: currentWord.word,
-      koreanMeaning: currentWord.koreanMeaning,
+      koreanMeaning: korean,
       englishDef: currentWord.englishDef,
       partOfSpeech: currentWord.partOfSpeech,
       book: verseContext?.book,
@@ -30,7 +34,12 @@ export default function WordPanel() {
       verse: verseContext?.verse,
       verseText: verseContext?.verseText,
     });
-    setSaved(true);
+    
+    if (result) {
+      setSaved(true);
+    } else {
+      alert("데이터베이스에 단어를 추가하는 데 실패했습니다. SQL 쿼리가 정상적으로 실행되었는지 확인해 주세요.");
+    }
     setSaving(false);
   };
 

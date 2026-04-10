@@ -90,8 +90,7 @@ export function useVocabulary() {
     [supabase]
   );
 
-  /** 복습이 필요한(오늘 또는 과거 예정일) 단어 목록 조회 */
-  const getDueVocabulary = useCallback(async (limit = 20): Promise<Database["public"]["Tables"]["vocabulary"]["Row"][]> => {
+  const getDueVocabulary = useCallback(async (limit = 20): Promise<Database["public"]["Tables"]["vocabulary"]["Row"][] | null> => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return [];
 
@@ -108,7 +107,7 @@ export function useVocabulary() {
 
     if (error) {
       console.error("[Vocabulary] Fetch Due error:", error);
-      return [];
+      return null; // DB 수정(SQL)이 안 된 경우 컴포넌트에서 알 수 있도록 null 반환
     }
     return data ?? [];
   }, [supabase]);
