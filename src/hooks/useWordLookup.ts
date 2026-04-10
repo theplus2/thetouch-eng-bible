@@ -48,12 +48,20 @@ export function useWordLookup() {
 
     // 4. 한국어 번역 — 원형(resolvedLemma)으로 번역해야 품질이 좋음
     const translationTarget = resolvedLemma !== normalizedWord ? resolvedLemma : normalizedWord;
-    const [koreanMeaning, koreanDef] = await Promise.all([
+    const [rawMeaning, rawDef] = await Promise.all([
       translateToKorean(translationTarget),
       dictResult?.meanings?.[0]?.definitions?.[0]?.definition 
         ? translateToKorean(dictResult.meanings[0].definitions[0].definition)
         : Promise.resolve(undefined)
     ]);
+
+    // 번역 결과가 원문과 동일하면 유의미한 번역이 아니므로 제거
+    const koreanMeaning = (rawMeaning && rawMeaning.toLowerCase() !== translationTarget.toLowerCase()) 
+      ? rawMeaning 
+      : undefined;
+    const koreanDef = (rawDef && rawDef !== dictResult?.meanings?.[0]?.definitions?.[0]?.definition)
+      ? rawDef
+      : undefined;
 
     // 활용형 노트 완성 (rawNote가 null인 경우 resolvedLemma로 생성)
     let inflectionNote: string | undefined;
