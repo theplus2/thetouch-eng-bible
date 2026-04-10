@@ -26,7 +26,7 @@ export default function FloatingAudioPlayer({
   if (!isPlaying && !isPaused) return null;
 
   return (
-    <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-2xl border border-primary-200 bg-surface-50/90 p-2 shadow-2xl animate-fade-in backdrop-blur-md sm:gap-4 sm:p-3">
+    <div className="fixed top-20 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-2xl border border-primary-200 bg-surface-50/95 p-2 shadow-2xl animate-fade-in backdrop-blur-md sm:gap-4 sm:p-3">
       {/* 배속 조절 */}
       <button
         onClick={onToggleRate}
