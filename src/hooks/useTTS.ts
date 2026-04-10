@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 
 export function useTTS() {
   const [isPlaying, setIsPlaying] = useState(false);
