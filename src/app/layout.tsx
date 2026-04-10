@@ -16,7 +16,7 @@ const notoSerif = Noto_Serif({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#4263eb",
+  themeColor: "#637c4a",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -37,7 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={`${inter.variable} ${notoSerif.variable}`}>
-      <body className="min-h-screen bg-white antialiased">{children}</body>
+      <body className="min-h-screen bg-surface-50 antialiased">{children}</body>
     </html>
   );
 }

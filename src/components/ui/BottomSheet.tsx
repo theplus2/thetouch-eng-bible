@@ -51,7 +51,7 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
       {/* 시트 */}
       <div
         ref={sheetRef}
-        className="relative z-10 w-full max-w-lg rounded-t-2xl bg-white p-6 shadow-2xl animate-slide-up"
+        className="relative z-10 w-full max-w-lg rounded-t-2xl bg-surface-50 p-6 shadow-2xl animate-slide-up"
         role="dialog"
         aria-modal="true"
       >

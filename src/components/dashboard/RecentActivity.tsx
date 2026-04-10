@@ -16,7 +16,7 @@ interface RecentActivityProps {
 export default function RecentActivity({ logs }: RecentActivityProps) {
   if (logs.length === 0) {
     return (
-      <div className="rounded-xl border border-surface-200 bg-white p-6 shadow-sm">
+      <div className="rounded-xl border border-surface-200 bg-white/80 p-6 shadow-sm backdrop-blur-sm">
         <p className="text-sm font-medium text-surface-600">📋 최근 활동</p>
         <p className="mt-4 text-center text-sm text-surface-400">
           아직 읽은 기록이 없습니다.

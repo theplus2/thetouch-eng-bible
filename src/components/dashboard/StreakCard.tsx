@@ -20,6 +20,7 @@ export default function StreakCard({ streak }: StreakCardProps) {
       {/* 배경 장식 */}
       <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10" />
       <div className="absolute -bottom-2 -right-2 h-16 w-16 rounded-full bg-white/5" />
+      <div className="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5" />
     </div>
   );
 }

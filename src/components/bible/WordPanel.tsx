@@ -58,7 +58,7 @@ export default function WordPanel() {
                 <span className="mr-2">{currentWord.phonetic}</span>
               )}
               {currentWord.partOfSpeech && (
-                <span className="rounded bg-surface-100 px-2 py-0.5 text-xs font-medium text-surface-600">
+                <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700">
                   {currentWord.partOfSpeech}
                 </span>
               )}

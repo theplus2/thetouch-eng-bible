@@ -12,7 +12,7 @@ export default function ProgressCard({ chaptersRead }: ProgressCardProps) {
   const percentage = (chaptersRead / TOTAL_CHAPTERS) * 100;
 
   return (
-    <div className="rounded-xl border border-surface-200 bg-white p-6 shadow-sm">
+    <div className="rounded-xl border border-surface-200 bg-white/80 p-6 shadow-sm backdrop-blur-sm">
       <p className="text-sm font-medium text-surface-600">📖 읽기 진도</p>
       <p className="mt-2 text-3xl font-bold text-surface-900">
         {chaptersRead}

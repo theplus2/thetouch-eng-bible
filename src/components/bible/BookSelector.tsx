@@ -26,7 +26,7 @@ export default function BookSelector({ books, onSelect }: BookSelectorProps) {
             <button
               key={book.book}
               onClick={() => onSelect(book.book)}
-              className="rounded-lg border border-surface-200 px-3 py-2.5 text-left text-sm font-medium text-surface-700 transition-all hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 active:bg-primary-100"
+              className="rounded-lg border border-surface-200 bg-white/70 px-3 py-2.5 text-left text-sm font-medium text-surface-700 transition-all hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 active:bg-primary-100"
             >
               <span className="block truncate">{book.name}</span>
               <span className="text-xs text-surface-400">{book.chapters}장</span>
@@ -45,7 +45,7 @@ export default function BookSelector({ books, onSelect }: BookSelectorProps) {
             <button
               key={book.book}
               onClick={() => onSelect(book.book)}
-              className="rounded-lg border border-surface-200 px-3 py-2.5 text-left text-sm font-medium text-surface-700 transition-all hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 active:bg-primary-100"
+              className="rounded-lg border border-surface-200 bg-white/70 px-3 py-2.5 text-left text-sm font-medium text-surface-700 transition-all hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 active:bg-primary-100"
             >
               <span className="block truncate">{book.name}</span>
               <span className="text-xs text-surface-400">{book.chapters}장</span>

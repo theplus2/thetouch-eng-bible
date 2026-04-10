@@ -47,7 +47,7 @@ export default function ReadPage() {
             onClick={() => setTab(t)}
             className={`pb-2 px-4 text-sm font-medium transition ${
               tab === t
-                ? "border-b-2 border-primary-600 text-primary-600"
+                ? "border-b-2 border-primary-500 text-primary-600"
                 : "text-surface-500 hover:text-surface-700"
             }`}
           >
@@ -67,7 +67,7 @@ export default function ReadPage() {
             <Link
               key={book.book}
               href={`/read/${book.book}`}
-              className="rounded-xl border border-surface-200 p-4 hover:border-primary-300 hover:bg-primary-50 transition"
+              className="rounded-xl border border-surface-200 bg-white/70 p-4 hover:border-primary-300 hover:bg-primary-50 transition backdrop-blur-sm"
             >
               <p className="font-semibold text-surface-800 text-sm">{book.name}</p>
               <p className="mt-0.5 text-xs text-surface-400">{book.abbr}</p>
@@ -76,7 +76,7 @@ export default function ReadPage() {
                   <span>{read}/{total}장</span>
                   <span>{pct}%</span>
                 </div>
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-100">
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-primary-100">
                   <div
                     className="h-full rounded-full bg-primary-400 transition-all"
                     style={{ width: `${pct}%` }}

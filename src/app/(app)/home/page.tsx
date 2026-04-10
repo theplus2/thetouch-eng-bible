@@ -46,7 +46,7 @@ export default function HomePage() {
 
       {/* 통계 카드 */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="rounded-xl border border-surface-200 bg-white p-6">
+        <div className="rounded-xl border border-surface-200 bg-white/80 p-6 shadow-sm backdrop-blur-sm">
           <h2 className="text-sm font-medium text-surface-600">연속 읽기</h2>
           <p className="mt-2 text-3xl font-bold text-primary-600">
             {loading ? "—" : `${streak}일`}
@@ -56,7 +56,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="rounded-xl border border-surface-200 bg-white p-6">
+        <div className="rounded-xl border border-surface-200 bg-white/80 p-6 shadow-sm backdrop-blur-sm">
           <h2 className="text-sm font-medium text-surface-600">읽은 장</h2>
           <p className="mt-2 text-3xl font-bold text-primary-600">
             {loading ? "—" : `${chaptersRead.toLocaleString()} / ${TOTAL_CHAPTERS.toLocaleString()}`}
@@ -66,7 +66,7 @@ export default function HomePage() {
               <span>전체 진도</span>
               <span>{pct}%</span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-surface-100">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-primary-100">
               <div
                 className="h-full rounded-full bg-primary-400 transition-all"
                 style={{ width: `${pct}%` }}
@@ -75,7 +75,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-surface-200 bg-white p-6">
+        <div className="rounded-xl border border-surface-200 bg-white/80 p-6 shadow-sm backdrop-blur-sm">
           <h2 className="text-sm font-medium text-surface-600">저장한 단어</h2>
           <p className="mt-2 text-3xl font-bold text-accent-600">
             {loading ? "—" : `${vocabCount}개`}
@@ -94,14 +94,14 @@ export default function HomePage() {
         {lastPos ? (
           <Link
             href={`/read/${lastPos.book}/${lastPos.chapter}`}
-            className="inline-flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700"
+            className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 active:bg-primary-700"
           >
             📖 계속 읽기
           </Link>
         ) : (
           <Link
             href="/read"
-            className="inline-flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700"
+            className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600 active:bg-primary-700"
           >
             📖 성경 읽기 시작
           </Link>
