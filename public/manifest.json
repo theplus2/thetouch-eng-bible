@@ -1,0 +1,25 @@
+{
+  "name": "더터치 Bible",
+  "short_name": "터치Bible",
+  "description": "더터치 청년부 영어 성경 읽기 앱",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#9ab17a",
+  "theme_color": "#9ab17a",
+  "orientation": "portrait-primary",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
