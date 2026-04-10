@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useVocabulary } from "@/hooks/useVocabulary";
+import { calculateNextReview, INITIAL_SRS_STATE } from "@/lib/vocabulary/srs";
 import type { Database } from "@/types/database";
 
 type VocabRow = Database["public"]["Tables"]["vocabulary"]["Row"];
@@ -10,6 +12,7 @@ interface FlashCardSessionProps {
 }
 
 export default function FlashCardSession({ words }: FlashCardSessionProps) {
+  const { updateWordReview } = useVocabulary();
   const [deck, setDeck] = useState<VocabRow[]>(() => shuffle([...words]));
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -30,15 +33,36 @@ export default function FlashCardSession({ words }: FlashCardSessionProps) {
     }
   }, [index, deck.length]);
 
-  const handleKnow = useCallback(() => {
-    setKnown((prev) => new Set(prev).add(current.id));
+  const processReview = useCallback(async (quality: 1 | 4) => {
+    if (!current) return;
+    
+    const currentState = {
+      reviewCount: current.review_count ?? INITIAL_SRS_STATE.reviewCount,
+      easeFactor: current.ease_factor ?? INITIAL_SRS_STATE.easeFactor,
+      interval: current.interval ?? INITIAL_SRS_STATE.interval,
+    };
+
+    const nextState = calculateNextReview(quality, currentState);
+    
+    // 비동기 업데이트 (await 안 기다리고 바로 다음 카드로 넘어감)
+    updateWordReview(current.id, nextState);
+    
+    if (quality === 1) {
+      setAgain((prev) => new Set(prev).add(current.id));
+    } else {
+      setKnown((prev) => new Set(prev).add(current.id));
+    }
+    
     advance();
-  }, [current, advance]);
+  }, [current, advance, updateWordReview]);
+
+  const handleKnow = useCallback(() => {
+    processReview(4);
+  }, [processReview]);
 
   const handleAgain = useCallback(() => {
-    setAgain((prev) => new Set(prev).add(current.id));
-    advance();
-  }, [current, advance]);
+    processReview(1);
+  }, [processReview]);
 
   const handleRestart = useCallback(() => {
     setDeck(shuffle([...words]));

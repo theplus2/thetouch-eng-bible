@@ -9,17 +9,19 @@ type VocabRow = Database["public"]["Tables"]["vocabulary"]["Row"];
 type Tab = "list" | "flashcard";
 
 export default function VocabularyPage() {
-  const { getVocabulary, deleteWord } = useVocabulary();
+  const { getVocabulary, getDueVocabulary, deleteWord } = useVocabulary();
   const [words, setWords] = useState<VocabRow[]>([]);
+  const [dueWords, setDueWords] = useState<VocabRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<Tab>("list");
+  const [tab, setTab] = useState<Tab>("flashcard"); // 기본탭을 플래시카드로 변경
 
   useEffect(() => {
-    getVocabulary().then((data) => {
-      setWords(data);
+    Promise.all([getVocabulary(), getDueVocabulary()]).then(([allData, dueData]) => {
+      setWords(allData);
+      setDueWords(dueData);
       setLoading(false);
     });
-  }, [getVocabulary]);
+  }, [getVocabulary, getDueVocabulary]);
 
   const handleDelete = async (id: number) => {
     await deleteWord(id);
@@ -70,7 +72,7 @@ export default function VocabularyPage() {
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-200 border-t-primary-600" />
         </div>
       ) : tab === "flashcard" ? (
-        <FlashCardSession words={words} />
+        <FlashCardSession words={dueWords} />
       ) : words.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-surface-300 bg-white/50 py-16 text-center">
           <p className="text-3xl">📝</p>

@@ -83,6 +83,10 @@ export interface Database {
           verse: number | null;
           verse_text: string | null;
           saved_at: string;
+          next_review_at: string | null;
+          review_count: number;
+          ease_factor: number;
+          interval: number;
         };
         Insert: {
           id?: number;
@@ -96,6 +100,10 @@ export interface Database {
           verse?: number | null;
           verse_text?: string | null;
           saved_at?: string;
+          next_review_at?: string | null;
+          review_count?: number;
+          ease_factor?: number;
+          interval?: number;
         };
         Update: {
           id?: number;
@@ -109,6 +117,10 @@ export interface Database {
           verse?: number | null;
           verse_text?: string | null;
           saved_at?: string;
+          next_review_at?: string | null;
+          review_count?: number;
+          ease_factor?: number;
+          interval?: number;
         };
         Relationships: [
           {

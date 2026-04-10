@@ -90,5 +90,50 @@ export function useVocabulary() {
     [supabase]
   );
 
-  return { saveWord, getVocabulary, deleteWord };
+  /** 복습이 필요한(오늘 또는 과거 예정일) 단어 목록 조회 */
+  const getDueVocabulary = useCallback(async (limit = 20): Promise<Database["public"]["Tables"]["vocabulary"]["Row"][]> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return [];
+
+    const now = new Date().toISOString();
+    
+    // next_review_at이 null이거나(새로 저장한 단어), 오늘 또는 과거인 단어 조회
+    const { data, error } = await supabase
+      .from("vocabulary")
+      .select("*")
+      .eq("user_id", user.id)
+      .or(`next_review_at.is.null,next_review_at.lte.${now}`)
+      .order("next_review_at", { ascending: true, nullsFirst: true })
+      .limit(limit);
+
+    if (error) {
+      console.error("[Vocabulary] Fetch Due error:", error);
+      return [];
+    }
+    return data ?? [];
+  }, [supabase]);
+
+  /** 복습 결과(SRS 상태) 업데이트 */
+  const updateWordReview = useCallback(async (
+    wordId: number, 
+    srsState: { nextReviewAt: string; reviewCount: number; easeFactor: number; interval: number }
+  ) => {
+    const { error } = await supabase
+      .from("vocabulary")
+      .update({
+        next_review_at: srsState.nextReviewAt,
+        review_count: srsState.reviewCount,
+        ease_factor: srsState.easeFactor,
+        interval: srsState.interval,
+      })
+      .eq("id", wordId);
+
+    if (error) {
+      console.error("[Vocabulary] Update Review error:", error);
+      return false;
+    }
+    return true;
+  }, [supabase]);
+
+  return { saveWord, getVocabulary, getDueVocabulary, deleteWord, updateWordReview };
 }
