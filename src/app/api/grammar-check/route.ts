@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * DeepL Write API 프록시 — 영어 문장 문법/스타일 교정.
- * 무료 플랜(:fx 키) → api-free.deepl.com 사용.
+ * LanguageTool 공개 API 프록시 — 영어 문법 교정.
+ * API 키 불필요. https://api.languagetool.org/v2/check
+ *
+ * DeepL Write API는 무료 플랜 미지원 → LanguageTool로 대체.
  */
 export async function POST(req: NextRequest) {
   let body: { text?: unknown };
@@ -17,51 +19,53 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'invalid_text' }, { status: 400 });
   }
 
-  const apiKey = process.env.DEEPL_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json({ error: 'no_api_key' }, { status: 500 });
-  }
-
-  const isFreePlan = apiKey.endsWith(':fx');
-  const baseUrl = isFreePlan
-    ? 'https://api-free.deepl.com/v2/write'
-    : 'https://api.deepl.com/v2/write';
+  const original = text.trim();
 
   try {
-    const res = await fetch(baseUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `DeepL-Auth-Key ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        text: [text.trim()],
-        target_lang: 'EN',
-      }),
+    const params = new URLSearchParams({
+      text: original,
+      language: 'en-US',
     });
 
-    if (res.status === 456) {
-      return NextResponse.json({ error: 'quota_exceeded' }, { status: 200 });
-    }
+    const res = await fetch('https://api.languagetool.org/v2/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString(),
+    });
 
     if (!res.ok) {
-      const errText = await res.text();
-      console.error(`[DeepL Write] status: ${res.status}, body: ${errText}`);
-      return NextResponse.json({ error: 'deepl_error' }, { status: 200 });
+      console.error(`[LanguageTool] status: ${res.status}`);
+      return NextResponse.json({ error: 'lt_error' }, { status: 200 });
     }
 
     const data = await res.json();
-    const improvement = data?.improvements?.[0];
-    const original: string = improvement?.original ?? text.trim();
-    const corrected: string = improvement?.result ?? text.trim();
+    const matches: Array<{
+      offset: number;
+      length: number;
+      replacements: Array<{ value: string }>;
+    }> = data.matches ?? [];
+
+    // offset 역순으로 정렬 후 교정 적용 (앞에서 수정하면 뒤 offset이 틀어짐)
+    let corrected = original;
+    const sorted = [...matches]
+      .filter((m) => m.replacements.length > 0)
+      .sort((a, b) => b.offset - a.offset);
+
+    for (const match of sorted) {
+      const replacement = match.replacements[0].value;
+      corrected =
+        corrected.slice(0, match.offset) +
+        replacement +
+        corrected.slice(match.offset + match.length);
+    }
 
     return NextResponse.json({
       original,
       corrected,
-      hasChanges: original !== corrected,
+      hasChanges: corrected !== original,
     });
   } catch (err) {
-    console.error('[DeepL Write] Fetch error:', err);
+    console.error('[LanguageTool] Fetch error:', err);
     return NextResponse.json({ error: 'fetch_error' }, { status: 200 });
   }
 }
