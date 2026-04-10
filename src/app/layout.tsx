@@ -79,6 +79,13 @@ export const metadata: Metadata = {
     images: [`${APP_URL}/og-image.png`],
   },
 
+  // ── iOS PWA ──────────────────────────────────────────
+  appleWebApp: {
+    capable: true,
+    title: '터치Bible',
+    statusBarStyle: 'black-translucent',
+  },
+
   // ── 기타 ────────────────────────────────────────────
   metadataBase: new URL(APP_URL),
   robots: { index: false, follow: false }, // 내부 앱 — 검색 노출 차단
